@@ -29,10 +29,28 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0x044BD9),
+        ),
+        scaffoldBackgroundColor: Color(0xFFFFFFFF),
+        // Define the default `TextTheme`. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: TextTheme(
+          displayLarge: const TextStyle(
+            fontSize: 72,
+            fontWeight: FontWeight.bold,
+          ),
+          // ···
+          titleLarge: TextStyle(
+            fontSize: 30,
+            fontStyle: FontStyle.italic,
+          ),
+          bodyMedium: TextStyle(),
+          displaySmall: TextStyle(),
+        ),
         useMaterial3: true,
       ),
-      home: DashboardTab(),
+      home: DashboardScreen(),
     );
   }
 }
