@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hygie_mobile/presentation/recompense/recompense_view.dart';
+import 'package:hygie_mobile/presentation/home/dashboard_page.dart';
+import 'package:hygie_mobile/presentation/journal/journal_page.dart';
+import 'package:hygie_mobile/presentation/objectifs/objectif_page.dart';
+import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,10 +14,10 @@ class _HomePageState extends State<HomePage> {
 
   // Liste des widgets correspondant à chaque écran
   final List<Widget> _screens = [
-    // DashboardScreen(),
-    // JournalScreen(),
-    RecompenseView()
-    // ObjectifsScreen(),
+    DashboardPage(),
+    const JournalPage(),
+    const RecompensePage(),
+    const ObjectifPage()
   ];
 
   void _onItemTapped(int index) {
