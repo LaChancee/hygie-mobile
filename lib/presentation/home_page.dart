@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hygie_mobile/presentation/home/dashboard_page.dart';
+import 'package:hygie_mobile/presentation/dashboard/dashboard_page.dart';
 import 'package:hygie_mobile/presentation/journal/journal_page.dart';
 import 'package:hygie_mobile/presentation/objectifs/objectif_page.dart';
 import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mon Application'),
+        title: Text('Hygie'),
       ),
       body: _screens[_selectedIndex],  // Affiche l'écran sélectionné
       bottomNavigationBar: BottomNavigationBar(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hygie_mobile/presentation/home/top_bar.dart';
+import 'package:hygie_mobile/presentation/dashboard/top_bar.dart';
 
 class DashboardTab extends StatefulWidget {
   @override
