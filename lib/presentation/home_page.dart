@@ -15,9 +15,9 @@ class _HomePageState extends State<HomePage> {
   // Liste des widgets correspondant à chaque écran
   final List<Widget> _screens = [
     DashboardPage(),
-    const JournalPage(),
+    JournalPage(),
     const RecompensePage(),
-    const ObjectifPage()
+    ObjectifsPage()
   ];
 
   void _onItemTapped(int index) {
