@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';  // Utilise uniquement widgets.dart
+import 'package:flutter/widgets.dart';
+import 'package:hygie_mobile/commons/colors.dart';  // Utilise uniquement widgets.dart
 
-class DashboardScreen extends StatelessWidget {
+class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -58,7 +59,7 @@ class DashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
-        color: Color(0xFF00AEEF),
+        color: Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
@@ -81,12 +82,12 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Testez votre niveau de dépendance',
-            style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
+            style: TextStyle(fontSize: 16, color: AppColors.textColor),
           ),
           Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Color(0xFF00AEEF),
+              color: AppColors.backgroundColor,
               borderRadius: BorderRadius.circular(50),
             ),
             child: Text(
