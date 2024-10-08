@@ -246,6 +246,9 @@ Widget _buildTestButton() {
 Widget _buildWidgets() {
   return Column(
     children: [
+      Text("Mes Widgets",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
