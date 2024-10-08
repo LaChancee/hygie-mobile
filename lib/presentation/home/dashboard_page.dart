@@ -5,37 +5,66 @@ import 'package:hygie_mobile/commons/colors.dart';  // Utilise uniquement widget
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header section
-            _buildHeader(),
-            SizedBox(height: 20),
-            // Consumption Test
-            _buildTestButton(),
-            SizedBox(height: 20),
-            // Widgets section
-            _buildWidgets(),
-            SizedBox(height: 20),
-            // Custom Offer Section
-            _buildOfferSection(),
-          ],
+    return Container(
+      color: Color(0xFF1991FF), // Couleur de fond bleu
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header section
+              _buildHeader(),
+              SizedBox(height: 20),
+              // Container qui ressemble à une bottom sheet
+              Container(
+                margin: const EdgeInsets.only(left: 0, right: 0, top: 20), // Suppression du margin pour toucher les bords
+                decoration: BoxDecoration(
+                  color: Colors.white, // Couleur de fond de la bottom sheet
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)), // Coins arrondis en haut
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3), // Couleur de l'ombre
+                      spreadRadius: 5, // Propage l'ombre
+                      blurRadius: 20, // Flou de l'ombre
+                      offset: Offset(0, 3), // Déplacement de l'ombre
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0), // Padding à l'intérieur de la "bottom sheet"
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Consumption Test
+                      _buildTestButton(),
+                      SizedBox(height: 20),
+                      // Widgets section
+                      _buildWidgets(),
+                      SizedBox(height: 20),
+                      // Custom Offer Section
+                      _buildOfferSection(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
 
   Widget _buildHeader() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20), // Ajoute un margin horizontal
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15), // Bord arrondi
-        color: Color(0xFF1991FF), // Exemple d'une couleur de fond (bleu clair)
 
       ),
-      padding: const EdgeInsets.all(20), // Ajoute du padding si nécessaire
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20), // Ajoute du padding horizontal et vertical
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center, // Centre les éléments horizontalement
         children: [
@@ -310,4 +339,4 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
-}
+
