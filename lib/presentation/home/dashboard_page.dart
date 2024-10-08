@@ -24,9 +24,9 @@ class DashboardPage extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)), // Coins arrondis en haut
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.3), // Couleur de l'ombre
-                      spreadRadius: 5, // Propage l'ombre
-                      blurRadius: 20, // Flou de l'ombre
+                      color: Colors.black.withOpacity(0.4), // Couleur de l'ombre
+                      spreadRadius: 10, // Propage l'ombre
+                      blurRadius: 30, // Flou de l'ombre
                       offset: Offset(0, 3), // Déplacement de l'ombre
                     ),
                   ],
