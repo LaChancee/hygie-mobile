@@ -30,19 +30,25 @@ class DashboardPage extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      color: Color(0xFFB3E5FC), // Exemple d'une couleur de fond (bleu clair)
-      padding: const EdgeInsets.all(20), // Tu peux aussi ajouter du padding si nécessaire
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15), // Bord arrondi
+        color: Color(0xFF1991FF), // Exemple d'une couleur de fond (bleu clair)
+
+      ),
+      padding: const EdgeInsets.all(20), // Ajoute du padding si nécessaire
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center, // Centre les éléments horizontalement
         children: [
           Text(
             'Non-fumeur depuis :',
-            style: TextStyle(fontSize: 18, color: Color(0xFF333333)),
+            style: TextStyle(fontSize: 18, color: Colors.white), // Texte blanc
+            textAlign: TextAlign.center, // Texte centré
           ),
           SizedBox(height: 5),
           Text(
             '2 jours',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFF00AEEF)),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white), // Texte blanc
+            textAlign: TextAlign.center, // Texte centré
           ),
           SizedBox(height: 20),
           Row(
@@ -84,21 +90,25 @@ class DashboardPage extends StatelessWidget {
       child: Text(label, style: TextStyle(fontSize: 16)),
     );
   }
-  Widget _buildBilanButton(String label){
+
+  Widget _buildBilanButton(String label) {
     return ElevatedButton(
       onPressed: () {
         // Ajoute ici l'action du bouton
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0x08FFFFFF), // Couleur de fond du bouton
-        foregroundColor: Colors.white,
-        textStyle: TextStyle(color: Colors.white),    // Couleur du texte du bouton
+        backgroundColor: Colors.white.withOpacity(0.2), // Couleur de fond avec 80% de transparence
+        foregroundColor: Colors.white,  // Couleur du texte du bouton
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Taille des boutons
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15), // Coins arrondis
+          side: BorderSide(color: Colors.white, width: 2), // Bordure blanche 100%
         ),
       ),
-      child: Text(label, style: TextStyle(fontSize: 16), selectionColor: Colors.white,),
+      child: Text(
+        label,
+        style: TextStyle(fontSize: 16), // Style du texte
+      ),
     );
   }
 
@@ -108,16 +118,48 @@ class DashboardPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Color(0xFFF1F8FF),
+        color: Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3), // Couleur de l'ombre avec transparence
+            spreadRadius: 2, // Propage l'ombre (comme une bordure floue)
+            blurRadius: 20,   // Floutage de l'ombre
+            offset: Offset(0, 3), // Déplacement de l'ombre (horizontal, vertical)
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Testez votre niveau de dépendance',
-            style: TextStyle(fontSize: 16, color: AppColors.textColor),
+          // Utilise Flexible pour éviter que le texte dépasse
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Aligne le texte à gauche
+              children: [
+                Text(
+                  'Testez votre niveau de dépendance',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xFF8C5EFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1, // Limite le texte à une seule ligne
+                  overflow: TextOverflow.ellipsis, // Ajoute "..." si le texte est trop long
+                ),
+                SizedBox(height: 5), // Ajoute un petit espace entre les deux textes
+                Text(
+                  'Fixez-vous des objectifs et obtenez des données plus détaillées.',
+                  style: TextStyle(fontSize: 14, color: AppColors.textColor),
+                  maxLines: 2, // Limite à deux lignes pour la description
+                  overflow: TextOverflow.ellipsis, // Ajoute "..." si le texte dépasse
+                  softWrap: true, // Permet au texte de passer à la ligne suivante
+                ),
+              ],
+            ),
           ),
+
+          // Le conteneur pour l'affichage "+20"
           Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
@@ -126,7 +168,7 @@ class DashboardPage extends StatelessWidget {
             ),
             child: Text(
               '+20',
-              style: TextStyle(color: Color(0xFFFFFF), fontWeight: FontWeight.bold),
+              style: TextStyle(color: Color(0xFF8C5EFF), fontWeight: FontWeight.bold),
             ),
           ),
         ],
