@@ -4,22 +4,39 @@ class RewardCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final int hyCoins;
-  final String imagePath;
 
   const RewardCard({
     Key? key,
     required this.title,
     required this.subtitle,
     required this.hyCoins,
-    required this.imagePath,
   }) : super(key: key);
+
+  String _getBackgroundImageForTitle(String title) {
+    switch (title) {
+      case 'HelloFresh':
+        return 'assets/images/hellofresh.jpg';
+      case 'Nike':
+        return 'assets/images/nike.jpg';
+      case '€10':
+      case '€30':
+        return 'assets/images/virement.jpg';
+      default:
+        return 'assets/default_image.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final String backgroundImagePath = _getBackgroundImageForTitle(title);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 220, // Largeur ajustée
+        width: 250,
+        constraints: BoxConstraints(
+          minHeight: 180,
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -31,19 +48,34 @@ class RewardCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
-                child: Image.asset(imagePath, fit: BoxFit.cover),
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+              child: Image.asset(
+                backgroundImagePath,
+                fit: BoxFit.cover,
+                height: 120,
+                width: double.infinity,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            Positioned(
+              right: 10,
+              top: 10,
+              child: Chip(
+                label: Text(
+                  '$hyCoins hc',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.blueAccent,
+              ),
+            ),
+            Positioned(
+              left: 10,
+              bottom: 10, // Positionner le titre plus haut
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,6 +84,7 @@ class RewardCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -59,15 +92,6 @@ class RewardCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Chip(
-                      label: Text('$hyCoins hc'),
-                      backgroundColor: Colors.blueAccent,
-                      labelStyle: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Hygie'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Hygie'),
+      // ),
       body: _screens[_selectedIndex],  // Affiche l'écran sélectionné
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

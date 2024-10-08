@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/header.dart';
 import 'package:hygie_mobile/presentation/recompense/hycoins_entete.dart';
 import 'package:hygie_mobile/presentation/recompense/reward_card';
 
@@ -8,21 +9,12 @@ class RecompensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.notifications, color: Colors.black),
-          onPressed: () {},
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/profile.jpg'), // Image du profil
-            ),
-          ),
-        ],
+      appBar: Header(
+        title: '',
+        onNotificationPressed: () {
+          // Action à réaliser lorsque le bouton de notification est pressé
+          print('Notification pressée');
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -59,7 +51,7 @@ class RecompensePage extends StatelessWidget {
 
   Widget _buildPromoCodes() {
     return SizedBox(
-      height: 130, // Hauteur ajustée pour les cartes
+      height: 200, // Hauteur ajustée
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: const [
@@ -67,13 +59,11 @@ class RecompensePage extends StatelessWidget {
             title: 'HelloFresh',
             subtitle: 'Code promo : 95 €',
             hyCoins: 375,
-            imagePath: 'assets/images/hellofresh.jpg',
           ),
           RewardCard(
             title: 'Nike',
             subtitle: 'Code promo : -15%',
             hyCoins: 425,
-            imagePath: 'assets/nike.png',
           ),
         ],
       ),
@@ -82,7 +72,7 @@ class RecompensePage extends StatelessWidget {
 
   Widget _buildVirements() {
     return SizedBox(
-      height: 130, // Hauteur ajustée pour les virements
+      height: 200, // Hauteur ajustée
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: const [
@@ -90,13 +80,11 @@ class RecompensePage extends StatelessWidget {
             title: '€10',
             subtitle: 'Virement bancaire',
             hyCoins: 1800,
-            imagePath: 'assets/virement.png',
           ),
           RewardCard(
             title: '€30',
             subtitle: 'Virement bancaire',
             hyCoins: 3200,
-            imagePath: 'assets/virement.png',
           ),
         ],
       ),
