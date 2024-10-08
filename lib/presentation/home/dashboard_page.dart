@@ -28,46 +28,80 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  // Header Section Widget
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Non-fumeur depuis :',
-          style: TextStyle(fontSize: 18, color: Color(0xFF333333)),
-        ),
-        SizedBox(height: 5),
-        Text(
-          '2 jours',
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFF00AEEF)),
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildActionButton('Consommation'),
-            _buildActionButton('Bilan'),
-          ],
-        ),
-      ],
+    return Container(
+      color: Color(0xFFB3E5FC), // Exemple d'une couleur de fond (bleu clair)
+      padding: const EdgeInsets.all(20), // Tu peux aussi ajouter du padding si nécessaire
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Non-fumeur depuis :',
+            style: TextStyle(fontSize: 18, color: Color(0xFF333333)),
+          ),
+          SizedBox(height: 5),
+          Text(
+            '2 jours',
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFF00AEEF)),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: _buildActionButton('+ Consommation'),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: _buildBilanButton('Bilan'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   // Button Builder for Consommation and Bilan
-  Widget _buildActionButton(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(10),
+  Widget _buildActionButton(String label) {
+    return ElevatedButton(
+      onPressed: () {
+        // Ajoute ici l'action du bouton
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryColor, // Couleur de fond du bouton
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Taille des boutons
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Coins arrondis
+        ),
       ),
-      child: Text(
-        text,
-        style: TextStyle(color: Color(0xFFFFFF), fontWeight: FontWeight.bold),
-      ),
+      child: Text(label, style: TextStyle(fontSize: 16)),
     );
   }
+  Widget _buildBilanButton(String label){
+    return ElevatedButton(
+      onPressed: () {
+        // Ajoute ici l'action du bouton
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0x08FFFFFF), // Couleur de fond du bouton
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(color: Colors.white),    // Couleur du texte du bouton
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Taille des boutons
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Coins arrondis
+        ),
+      ),
+      child: Text(label, style: TextStyle(fontSize: 16), selectionColor: Colors.white,),
+    );
+  }
+
 
   // Consumption Test Button
   Widget _buildTestButton() {
