@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget {
   const TopBar({super.key});
@@ -12,7 +12,11 @@ class _TopBarState extends State<TopBar> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Icon'),
+        Text('Icon',
+        style: TextStyle(
+          color: Color(0xFFFFFFFF),
+          fontSize: 10
+        ),),
 
       ],
     );
