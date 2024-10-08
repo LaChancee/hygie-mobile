@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hygie_mobile/commons/colors.dart';  // Utilise uniquement widgets.dart
+import 'package:hygie_mobile/commons/colors.dart';
+
 
 class DashboardPage extends StatelessWidget {
   @override
