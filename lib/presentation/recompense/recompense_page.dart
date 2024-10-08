@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hygie_mobile/presentation/header.dart';
+import 'package:hygie_mobile/commons/header.dart';
 import 'package:hygie_mobile/presentation/recompense/hycoins_entete.dart';
 import 'package:hygie_mobile/presentation/recompense/reward_card';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hygie_mobile/commons/colors.dart';
+import 'package:hygie_mobile/commons/header.dart';
 
 
 class DashboardPage extends StatelessWidget {
@@ -14,6 +15,7 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Header(title: "",), // Ajout du ReusableHeader ici
               // Header section
               _buildHeader(),
               SizedBox(height: 20),
