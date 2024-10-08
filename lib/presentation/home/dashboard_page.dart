@@ -57,50 +57,53 @@ class DashboardPage extends StatelessWidget {
 }
 
 
-  Widget _buildHeader() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20), // Ajoute un margin horizontal
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15), // Bord arrondi
+Widget _buildHeader() {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 20), // Ajoute un margin horizontal
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15), // Bord arrondi
+      color: Color(0xFF1991FF), // Couleur de fond (ajoutée pour un meilleur contraste)
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30), // Ajoute du padding horizontal et vertical
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center, // Centre les éléments horizontalement
+      children: [
+        SizedBox(height: 50), // Espace supplémentaire en haut
+        Text(
+          'Non-fumeur depuis :',
+          style: TextStyle(fontSize: 18, color: Colors.white), // Texte blanc
+          textAlign: TextAlign.center, // Texte centré
+        ),
+        SizedBox(height: 5),
+        Text(
+          '2 jours',
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white), // Texte blanc
+          textAlign: TextAlign.center, // Texte centré
+        ),
+        SizedBox(height: 40), // Espace supplémentaire entre le texte et les boutons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: _buildActionButton('+ Consommation'),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: _buildBilanButton('Bilan'),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 5), // Espace en bas du header
+      ],
+    ),
+  );
+}
 
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20), // Ajoute du padding horizontal et vertical
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Centre les éléments horizontalement
-        children: [
-          Text(
-            'Non-fumeur depuis :',
-            style: TextStyle(fontSize: 18, color: Colors.white), // Texte blanc
-            textAlign: TextAlign.center, // Texte centré
-          ),
-          SizedBox(height: 5),
-          Text(
-            '2 jours',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white), // Texte blanc
-            textAlign: TextAlign.center, // Texte centré
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: _buildActionButton('+ Consommation'),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: _buildBilanButton('Bilan'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   // Button Builder for Consommation and Bilan
   Widget _buildActionButton(String label) {
@@ -257,43 +260,49 @@ class DashboardPage extends StatelessWidget {
   }
 
   // Consumption graph widget placeholder
-  Widget _buildConsumptionGraph() {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Color(0xFFF1F8FF),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Consommation de la semaine',
-            style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(7, (index) {
-              return Container(
+// Consumption graph widget placeholder
+Widget _buildConsumptionGraph() {
+  return Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(
+      color: Color(0xFFF1F8FF),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Consommation de la semaine',
+          style: TextStyle(fontSize: 16, color: Color(0xFF333333)),
+        ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(7, (index) {
+            return Expanded( // Utilisation d'Expanded pour s'assurer que chaque case ne déborde pas
+              child: Container(
                 padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.symmetric(horizontal: 2), // Ajout d'une petite marge horizontale
                 decoration: BoxDecoration(
                   color: index == 0 ? Color(0xFF00AEEF) : Color(0xFFDDDDDD),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
                   'Jour ${index + 1}',
-                  style: TextStyle(color: Color(0xFFFFFF)),
+                  textAlign: TextAlign.center, // Centrer le texte
+                  style: TextStyle(color: Color(0xFFFFFFFF)), // Corriger la couleur du texte
                 ),
-              );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+              ),
+            );
+          }),
+        ),
+      ],
+    ),
+  );
+}
 
-  // Placeholder for additional widgets
+
+// Placeholder for additional widgets
   Widget _buildPlaceholderWidget() {
     return Container(
       padding: const EdgeInsets.all(15),
