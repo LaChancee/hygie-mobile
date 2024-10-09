@@ -3,6 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:hygie_mobile/commons/colors.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:hygie_mobile/presentation/dashboard/header_dashboard.dart'; // Assurez-vous que le chemin est correct
+import 'package:hygie_mobile/presentation/dashboard/test_button.dart'; // Assurez-vous que le chemin est correct
+
+
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -48,7 +51,7 @@ class DashboardPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Bouton de Test
-                    _buildTestButton(),
+                    TestButton(),
                     SizedBox(height: 20),
                     // Section des Widgets
                     _buildWidgets(),
@@ -65,104 +68,6 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBilanButton(String label) {
-    return ElevatedButton(
-      onPressed: () {
-        // Ajoute ici l'action du bouton
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white.withOpacity(0.2),
-        // Couleur de fond avec 80% de transparence
-        foregroundColor: Colors.white,
-        // Couleur du texte du bouton
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        // Taille des boutons
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // Coins arrondis
-          side:
-              BorderSide(color: Colors.white, width: 2), // Bordure blanche 100%
-        ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(fontSize: 16), // Style du texte
-      ),
-    );
-  }
-
-// Consumption Test Button
-  Widget _buildTestButton() {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            // Couleur de l'ombre avec transparence
-            spreadRadius: 2,
-            // Propage l'ombre (comme une bordure floue)
-            blurRadius: 20,
-            // Floutage de l'ombre
-            offset:
-                Offset(0, 3), // Déplacement de l'ombre (horizontal, vertical)
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Utilise Flexible pour éviter que le texte dépasse
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // Aligne le texte à gauche
-              children: [
-                Text(
-                  'Testez votre niveau de dépendance',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xFF8C5EFF),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1, // Limite le texte à une seule ligne
-                  overflow: TextOverflow
-                      .ellipsis, // Ajoute "..." si le texte est trop long
-                ),
-                SizedBox(height: 5),
-                // Ajoute un petit espace entre les deux textes
-                Text(
-                  'Fixez-vous des objectifs et obtenez des données plus détaillées.',
-                  style: TextStyle(fontSize: 14, color: AppColors.textColor),
-                  maxLines: 2,
-                  // Limite à deux lignes pour la description
-                  overflow: TextOverflow.ellipsis,
-                  // Ajoute "..." si le texte dépasse
-                  softWrap:
-                      true, // Permet au texte de passer à la ligne suivante
-                ),
-              ],
-            ),
-          ),
-
-          // Le conteneur pour l'affichage "+20"
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: AppColors.backgroundColor,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Text(
-              '+20',
-              style: TextStyle(
-                  color: Color(0xFF8C5EFF), fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
 // Widgets section (Argent dépensé, Jours sans alcool, etc.)
   Widget _buildWidgets() {
