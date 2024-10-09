@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/commons/header.dart'; // Assurez-vous d'avoir importé le Header
 
 class ProgressionPage extends StatelessWidget {
   final String type;
@@ -8,21 +9,56 @@ class ProgressionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$type - Objectifs'),
-        backgroundColor: Colors.blue,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProgressBar('Arrêter sa consommation en 2 jours', 0.2),
-            SizedBox(height: 20),
-            _buildProgressBar('Arrêter sa consommation en 5 jours', 0.5),
-            SizedBox(height: 20),
-            _buildProgressBar('Arrêter sa consommation en 10 jours', 0.8),
-            // Ajoute d'autres barres de progression si nécessaire
+            // Header global de l'application
+            Header(title: ""), // Utilisation du header réutilisable
+            
+            SizedBox(height: 20), // Espacement après le header
+
+            // Barre de retour + titre de la page (Alcool - Objectifs)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  // Icône de retour en arrière
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context); // Retour à la page précédente
+                    },
+                  ),
+                  // Titre de la page
+                  Text(
+                    '$type - Objectifs',
+                    style: TextStyle(
+                      fontSize: 24, // Taille de texte pour le titre
+                      fontWeight: FontWeight.w600, // Un poids légèrement moins élevé que le header
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20), // Espacement après le titre
+
+            // Liste des barres de progression
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProgressBar('Arrêter sa consommation en 2 jours', 0.2),
+                  SizedBox(height: 20),
+                  _buildProgressBar('Arrêter sa consommation en 5 jours', 0.5),
+                  SizedBox(height: 20),
+                  _buildProgressBar('Arrêter sa consommation en 10 jours', 0.8),
+                  // Ajoute d'autres barres de progression si nécessaire
+                ],
+              ),
+            ),
           ],
         ),
       ),

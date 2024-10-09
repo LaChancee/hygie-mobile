@@ -18,7 +18,7 @@ final Map<DateTime, List<Map<String, String>>> activities = {
     {'time': '10:23', 'description': '1 cigarette consommée'},
     {'time': '08:45', 'description': '1 cigarette consommée'},
   ],
-  DateTime(2024, 10, 8): [ // Exemples pour le 7 octobre 2024
+  DateTime(2024, 10, 9): [ // Exemples pour le 7 octobre 2024
     {'time': '09:30', 'description': '2 cigarette consommée'},
     {'time': '10:23', 'description': '1 cigarette consommée'},
     {'time': '08:45', 'description': '1 cigarette consommée'},
@@ -43,10 +43,6 @@ final Map<DateTime, List<Map<String, String>>> activities = {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Journal'),
-        backgroundColor: Colors.blueAccent,
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
