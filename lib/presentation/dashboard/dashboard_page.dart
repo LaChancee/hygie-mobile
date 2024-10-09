@@ -4,103 +4,83 @@ import 'package:hygie_mobile/commons/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hygie_mobile/commons/header.dart';
 
-
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Image de fond qui s'adapte à l'écran
-        Positioned.fill(
-          child: Image.asset(
-            'assets/images/hygie_background.png',
-            fit: BoxFit.cover, // Couvre tout l'arrière-plan
-          ),
-        ),
-        // Couche floue si nécessaire
-        Positioned.fill(
-          child: Container(
-            color: Colors.black.withOpacity(
-                0.1), // Couche floue avec transparence
-          ),
-        ),
-        // Contenu principal
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Header(title: "",), // Ajout du ReusableHeader ici
-                // Section Header
-                _buildHeader(),
-                SizedBox(height: 20),
-
-                // Container qui ressemble à une bottom sheet
-                Container(
-                  margin: const EdgeInsets.only(left: 0, right: 0, top: 20),
-                  // Suppression du margin pour toucher les bords
-                  decoration: BoxDecoration(
-                    color: Colors.white, // Couleur de fond de la bottom sheet
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(30)), // Coins arrondis en haut
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
-                        // Couleur de l'ombre
-                        spreadRadius: 10,
-                        // Propage l'ombre
-                        blurRadius: 30,
-                        // Flou de l'ombre
-                        offset: Offset(0, 3), // Déplacement de l'ombre
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    // Padding à l'intérieur de la "bottom sheet"
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Bouton de Test
-                        _buildTestButton(),
-                        SizedBox(height: 20),
-                        // Section des Widgets
-                        _buildWidgets(),
-                        SizedBox(height: 20),
-                        // Section des Offres Personnalisées
-                        _buildOfferSection(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          // SliverAppBar, qui se rétrécit au scroll
+          SliverAppBar(
+            expandedHeight: 300.0, // Hauteur de l'expansion
+            floating: false, // Le header ne flotte pas au-dessus
+            pinned: true, // Le header reste visible quand on scrolle
+            flexibleSpace: FlexibleSpaceBar(
+              background: _buildHeader(),
+              centerTitle: true,
             ),
           ),
-        ),
-      ],
+
+          // Contenu principal avec coins arrondis en haut
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.only(left: 0, right: 0, top: 0), // Supprime le margin pour toucher les bords
+              decoration: BoxDecoration(
+                color: Colors.white, // Couleur de fond de la bottom sheet
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)), // Coins arrondis en haut
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.4), // Couleur de l'ombre
+                    spreadRadius: 10, // Propage l'ombre
+                    blurRadius: 30, // Flou de l'ombre
+                    offset: Offset(0, 3), // Déplacement de l'ombre
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0), // Padding à l'intérieur de la "bottom sheet"
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Bouton de Test
+                    _buildTestButton(),
+                    SizedBox(height: 20),
+                    // Section des Widgets
+                    _buildWidgets(),
+                    SizedBox(height: 20),
+                    // Section des Offres Personnalisées
+                    _buildOfferSection(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  // Contenu du header avec image de fond
   Widget _buildHeader() {
     return Stack(children: [
-
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/hygie_background.png'),
+            fit: BoxFit.cover, // Ajuste l'image à la taille de l'espace
+          ),
+        ),
+      ),
       Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
-        // Ajoute un margin horizontal
-
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        // Ajoute du padding horizontal et vertical
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30), // Ajoute du padding horizontal et vertical
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          // Centre les éléments horizontalement
           children: [
-            SizedBox(height: 50),
-            // Espace supplémentaire en haut
+            SizedBox(height: 50), // Espace supplémentaire en haut
             Text(
               'Non-fumeur depuis :',
               style: TextStyle(fontSize: 18, color: Colors.white),
-              // Texte blanc
               textAlign: TextAlign.center, // Texte centré
             ),
             SizedBox(height: 5),
@@ -110,11 +90,9 @@ class DashboardPage extends StatelessWidget {
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
-              // Texte blanc
               textAlign: TextAlign.center, // Texte centré
             ),
-            SizedBox(height: 40),
-            // Espace supplémentaire entre le texte et les boutons
+            SizedBox(height: 40), // Espace supplémentaire entre le texte et les boutons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -132,15 +110,12 @@ class DashboardPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 5),
-            // Espace en bas du header
+            SizedBox(height: 5), // Espace en bas du header
           ],
         ),
       ),
-
     ]);
   }
-
 // Button Builder for Consommation and Bilan
   Widget _buildActionButton(String label) {
     return ElevatedButton(
@@ -175,8 +150,8 @@ class DashboardPage extends StatelessWidget {
         // Taille des boutons
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15), // Coins arrondis
-          side: BorderSide(
-              color: Colors.white, width: 2), // Bordure blanche 100%
+          side:
+              BorderSide(color: Colors.white, width: 2), // Bordure blanche 100%
         ),
       ),
       child: Text(
@@ -201,8 +176,8 @@ class DashboardPage extends StatelessWidget {
             // Propage l'ombre (comme une bordure floue)
             blurRadius: 20,
             // Floutage de l'ombre
-            offset: Offset(
-                0, 3), // Déplacement de l'ombre (horizontal, vertical)
+            offset:
+                Offset(0, 3), // Déplacement de l'ombre (horizontal, vertical)
           ),
         ],
       ),
@@ -235,7 +210,8 @@ class DashboardPage extends StatelessWidget {
                   // Limite à deux lignes pour la description
                   overflow: TextOverflow.ellipsis,
                   // Ajoute "..." si le texte dépasse
-                  softWrap: true, // Permet au texte de passer à la ligne suivante
+                  softWrap:
+                      true, // Permet au texte de passer à la ligne suivante
                 ),
               ],
             ),
@@ -266,7 +242,8 @@ class DashboardPage extends StatelessWidget {
       children: [
         // Texte "Mes Widgets" aligné à gauche avec espacement en bas
         Padding(
-          padding: const EdgeInsets.only(left: 5.0, bottom: 15), // Padding pour le texte
+          padding: const EdgeInsets.only(left: 5.0, bottom: 15),
+          // Padding pour le texte
           child: Text(
             "Mes Widgets",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -278,17 +255,18 @@ class DashboardPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildWidgetCard('Argent dépensé', '138,67 €', 'vs 26 €'),
-            _buildWidgetCard('Jours sans alcool', '23 jours', 'Depuis le 5 juin 2024'),
+            _buildWidgetCard(
+                'Jours sans alcool', '23 jours', 'Depuis le 5 juin 2024'),
           ],
         ),
-        SizedBox(height: 20), // Ajoute un espacement entre les widgets et le graphique
+        SizedBox(height: 20),
+        // Ajoute un espacement entre les widgets et le graphique
         _buildConsumptionGraph(),
         SizedBox(height: 20),
         _buildPlaceholderWidget(),
       ],
     );
   }
-
 
 // Widget card for displaying metrics
   Widget _buildWidgetCard(String title, String mainValue, String subValue) {
@@ -359,8 +337,8 @@ class DashboardPage extends StatelessWidget {
                     'Jour ${index + 1}',
                     textAlign: TextAlign.center, // Centrer le texte
                     style: TextStyle(
-                        color: Color(
-                            0xFFFFFFFF)), // Corriger la couleur du texte
+                        color:
+                            Color(0xFFFFFFFF)), // Corriger la couleur du texte
                   ),
                 ),
               );
