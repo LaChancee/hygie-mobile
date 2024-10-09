@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/commons/colors.dart';
 
 class HeaderDashboard extends StatelessWidget {
 
@@ -46,7 +47,7 @@ class HeaderDashboard extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: _buildActionButton('+ Consommation'),
+                      child: _buildActionButton('Consommation'),
                     ),
                   ),
                   Expanded(
@@ -72,7 +73,7 @@ class HeaderDashboard extends StatelessWidget {
         // Ajoute ici l'action du bouton
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue, // Couleur de fond du bouton
+        backgroundColor: AppColors.primaryColor, // Couleur de fond du bouton
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         shape: RoundedRectangleBorder(
