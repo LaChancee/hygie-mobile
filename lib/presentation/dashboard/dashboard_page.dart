@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hygie_mobile/commons/colors.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hygie_mobile/commons/header.dart';
+import 'package:hygie_mobile/presentation/dashboard/header_dashboard.dart'; // Assurez-vous que le chemin est correct
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -12,11 +12,12 @@ class DashboardPage extends StatelessWidget {
         slivers: [
           // SliverAppBar, qui se rétrécit au scroll
           SliverAppBar(
+            title: Header(title: '',),
             expandedHeight: 300.0, // Hauteur de l'expansion
             floating: false, // Le header ne flotte pas au-dessus
             pinned: true, // Le header reste visible quand on scrolle
             flexibleSpace: FlexibleSpaceBar(
-              background: _buildHeader(),
+              background: HeaderDashboard(),
               centerTitle: true,
             ),
           ),
@@ -24,10 +25,13 @@ class DashboardPage extends StatelessWidget {
           // Contenu principal avec coins arrondis en haut
           SliverToBoxAdapter(
             child: Container(
-              margin: const EdgeInsets.only(left: 0, right: 0, top: 0), // Supprime le margin pour toucher les bords
+              margin: const EdgeInsets.only(left: 0, right: 0, top: 0),
+              // Supprime le margin pour toucher les bords
               decoration: BoxDecoration(
-                color: Colors.white, // Couleur de fond de la bottom sheet
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)), // Coins arrondis en haut
+                color: Colors.white,
+                // Couleur de fond de la bottom sheet
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                // Coins arrondis en haut
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.4), // Couleur de l'ombre
@@ -38,7 +42,8 @@ class DashboardPage extends StatelessWidget {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0), // Padding à l'intérieur de la "bottom sheet"
+                padding: const EdgeInsets.all(20.0),
+                // Padding à l'intérieur de la "bottom sheet"
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,82 +62,6 @@ class DashboardPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  // Contenu du header avec image de fond
-  Widget _buildHeader() {
-    return Stack(children: [
-      Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/hygie_background.png'),
-            fit: BoxFit.cover, // Ajuste l'image à la taille de l'espace
-          ),
-        ),
-      ),
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30), // Ajoute du padding horizontal et vertical
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 50), // Espace supplémentaire en haut
-            Text(
-              'Non-fumeur depuis :',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-              textAlign: TextAlign.center, // Texte centré
-            ),
-            SizedBox(height: 5),
-            Text(
-              '2 jours',
-              style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-              textAlign: TextAlign.center, // Texte centré
-            ),
-            SizedBox(height: 40), // Espace supplémentaire entre le texte et les boutons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: _buildActionButton('+ Consommation'),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: _buildBilanButton('Bilan'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 5), // Espace en bas du header
-          ],
-        ),
-      ),
-    ]);
-  }
-// Button Builder for Consommation and Bilan
-  Widget _buildActionButton(String label) {
-    return ElevatedButton(
-      onPressed: () {
-        // Ajoute ici l'action du bouton
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryColor,
-        // Couleur de fond du bouton
-        foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        // Taille des boutons
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // Coins arrondis
-        ),
-      ),
-      child: Text(label, style: TextStyle(fontSize: 16)),
     );
   }
 
@@ -255,8 +184,9 @@ class DashboardPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildWidgetCard('Argent dépensé', '138,67 €', 'vs 26 €'),
-            _buildWidgetCard(
-                'Jours sans alcool', '23 jours', 'Depuis le 5 juin 2024'),
+            // Ajout d'un espace entre les deux boutons
+            SizedBox(width: 20), // Ajout d'espace entre les widgets
+            _buildWidgetCard('Jours sans alcool', '23 jours', 'Depuis le 5 juin 2024'),
           ],
         ),
         SizedBox(height: 20),
