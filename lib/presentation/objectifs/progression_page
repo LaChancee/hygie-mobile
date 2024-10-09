@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hygie_mobile/commons/header.dart'; // Assurez-vous d'avoir importé le Header
+import 'package:hygie_mobile/commons/header.dart';
 
 class ProgressionPage extends StatelessWidget {
   final String type;
@@ -13,50 +13,49 @@ class ProgressionPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header global de l'application
             Header(title: ""), // Utilisation du header réutilisable
-            
-            SizedBox(height: 20), // Espacement après le header
+            SizedBox(height: 20),
 
-            // Barre de retour + titre de la page (Alcool - Objectifs)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  // Icône de retour en arrière
                   IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pop(context); // Retour à la page précédente
                     },
                   ),
-                  // Titre de la page
                   Text(
                     '$type - Objectifs',
                     style: TextStyle(
-                      fontSize: 24, // Taille de texte pour le titre
-                      fontWeight: FontWeight.w600, // Un poids légèrement moins élevé que le header
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 20),
 
-            SizedBox(height: 20), // Espacement après le titre
-
-            // Liste des barres de progression
             Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProgressBar('Arrêter sa consommation en 2 jours', 0.2),
-                  SizedBox(height: 20),
-                  _buildProgressBar('Arrêter sa consommation en 5 jours', 0.5),
-                  SizedBox(height: 20),
-                  _buildProgressBar('Arrêter sa consommation en 10 jours', 0.8),
-                  // Ajoute d'autres barres de progression si nécessaire
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildProgressBar('Arrêter sa consommation en 2 jours', 0.2),
+                      SizedBox(height: 20),
+                      _buildProgressBar('Arrêter sa consommation en 5 jours', 0.5),
+                      SizedBox(height: 20),
+                      _buildProgressBar('Arrêter sa consommation en 10 jours', 0.8),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
@@ -65,7 +64,6 @@ class ProgressionPage extends StatelessWidget {
     );
   }
 
-  // Widget pour une barre de progression avec un label
   Widget _buildProgressBar(String label, double progress) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
