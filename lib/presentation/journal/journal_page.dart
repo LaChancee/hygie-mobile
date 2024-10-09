@@ -72,7 +72,7 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10), // Réduit l'espace entre les onglets et la date
 
           // Affichage de la date choisie (sans carte)
           Padding(
@@ -96,7 +96,7 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10), // Réduit l'espace entre la date et les activités
 
           // Contenu des onglets
           Expanded(
