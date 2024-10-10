@@ -1,6 +1,1 @@
-{
-  "firestore": {
-    "rules": "(firestore.rules)",
-    "indexes": "firestore.indexes.json"
-  }
-}
+{"firestore":{"rules":"(firestore.rules)","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"hygie-bc43a","appId":"1:487775523474:android:1f64ae7c098f402983cc4b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"hygie-bc43a","configurations":{"android":"1:487775523474:android:1f64ae7c098f402983cc4b","ios":"1:487775523474:ios:061c943e966651a383cc4b","macos":"1:487775523474:ios:061c943e966651a383cc4b","web":"1:487775523474:web:66269fb50a26f12983cc4b","windows":"1:487775523474:web:5b7cd8e75a45097b83cc4b"}}}}}}
