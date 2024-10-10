@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/home_page.dart';
+
+import 'commons/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,10 +31,16 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: AppColors.primaryColor,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+        scaffoldBackgroundColor: AppColors.backgroundColor,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: AppColors.textColor),
+          headlineMedium: TextStyle(color: AppColors.textColor),
+        ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomePage(),  // Appel de la HomePage
     );
   }
 }
