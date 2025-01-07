@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:hygie_mobile/commons/header.dart';
 
 class JournalPage extends StatefulWidget {
@@ -85,10 +85,10 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
                   onPressed: () => _incrementDate(-1),
                 ),
                 // Texte de la date avec style de couleur
-                Text(
-                  DateFormat('EEEE d MMMM').format(selectedDate),
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(4, 75, 217, 1)), // Couleur bleue
-                ),
+               // Text(
+                  //DateFormat('EEEE d MMMM').format(selectedDate),
+                 // style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(4, 75, 217, 1)), // Couleur bleue
+               // ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right, color: Colors.blue),
                   onPressed: () => _incrementDate(1),
