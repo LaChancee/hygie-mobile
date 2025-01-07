@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/home_page.dart';
 
-import 'commons/colors.dart';
+import 'commons/ui/colors.dart';
 
 void main() {
   runApp(const MyApp());

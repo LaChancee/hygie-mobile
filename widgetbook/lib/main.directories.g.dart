@@ -19,21 +19,26 @@ final directories = <_i1.WidgetbookNode>[
       _i1.WidgetbookFolder(
         name: 'action',
         children: [
-          _i1.WidgetbookComponent(
-            name: 'PrimaryButton',
-            useCases: [
-              _i1.WidgetbookUseCase(
-                name: 'Disabled',
-                builder: _i2.disabledButton,
-              ),
-              _i1.WidgetbookUseCase(
-                name: 'Primary',
-                builder: _i2.primaryButton,
-              ),
-              _i1.WidgetbookUseCase(
-                name: 'Secondary',
-                builder: _i2.secondaryButton,
-              ),
+          _i1.WidgetbookFolder(
+            name: 'primary',
+            children: [
+              _i1.WidgetbookComponent(
+                name: 'PrimaryButton',
+                useCases: [
+                  _i1.WidgetbookUseCase(
+                    name: 'Disabled',
+                    builder: _i2.disabledButton,
+                  ),
+                  _i1.WidgetbookUseCase(
+                    name: 'Pressed',
+                    builder: _i2.pressedButton,
+                  ),
+                  _i1.WidgetbookUseCase(
+                    name: 'Primary',
+                    builder: _i2.primaryButton,
+                  ),
+                ],
+              )
             ],
           )
         ],
