@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/commons/ui/colors.dart';
 
 // Définir les différents états du bouton
 enum ButtonState {
   primary,
-  secondary,
+  pressed,
   disabled,
 }
 
@@ -27,15 +28,15 @@ class PrimaryButton extends StatelessWidget {
 
     switch (state) {
       case ButtonState.primary:
-        backgroundColor = Colors.blue;
+        backgroundColor = AppColors.primaryColor;
         textColor = Colors.white;
         break;
-      case ButtonState.secondary:
-        backgroundColor = Colors.grey[300]!;
-        textColor = Colors.black;
+      case ButtonState.pressed:
+        backgroundColor = Color(0xFF0A409E);
+        textColor = Colors.white;
         break;
       case ButtonState.disabled:
-        backgroundColor = Colors.grey;
+        backgroundColor = Color(0xFFBFBFBF);
         textColor = Colors.white;
         isDisabled = true;
         break;

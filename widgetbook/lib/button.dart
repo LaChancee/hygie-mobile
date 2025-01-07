@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
-import 'package:hygie_mobile/commons/action/button.dart';
+import 'package:hygie_mobile/commons/action/primary/button.dart';
 
 @UseCase(name: 'Primary', type: PrimaryButton)
 Widget primaryButton(BuildContext context) {
@@ -9,11 +9,12 @@ Widget primaryButton(BuildContext context) {
     state: ButtonState.primary,
   );
 }
-@UseCase(name: 'Secondary', type: PrimaryButton)
-Widget secondaryButton(BuildContext context) {
+
+@UseCase(name: 'Pressed', type: PrimaryButton)
+Widget pressedButton(BuildContext context) {
   return PrimaryButton(
-    text: 'Secondary',
-    state: ButtonState.secondary,
+    text: 'Pressed',
+    state: ButtonState.pressed,
   );
 }
 
