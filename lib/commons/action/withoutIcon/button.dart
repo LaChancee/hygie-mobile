@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/ui/colors.dart';
+import 'package:hygie_mobile/commons/action/button_state.dart';
 
-// Définir les différents états du bouton
-enum ButtonState {
-  primary,
-  pressed,
-  disabled,
-}
 
 // Widget du bouton personnalisé
-class PrimaryButton extends StatelessWidget {
+class ButtonWithoutIcon extends StatelessWidget {
   final String text;
   final ButtonState state;
 
-  const PrimaryButton({
+  const ButtonWithoutIcon({
     super.key,
     required this.text,
     required this.state,
@@ -33,6 +28,22 @@ class PrimaryButton extends StatelessWidget {
         break;
       case ButtonState.pressed:
         backgroundColor = Color(0xFF0A409E);
+        textColor = Colors.white;
+        break;
+      case ButtonState.secondary:
+        backgroundColor = AppColors.secondaryColor;
+        textColor = Colors.white;
+        break;
+      case ButtonState.secondaryPressed:
+        backgroundColor = Color(0xFF6C33FF);
+        textColor = Colors.white;
+        break;
+      case ButtonState.tertiary:
+        backgroundColor = AppColors.tertiaryColor;
+        textColor = Colors.white;
+        break;
+      case ButtonState.secondaryPressed:
+        backgroundColor = Color(0xFF6C33FF);
         textColor = Colors.white;
         break;
       case ButtonState.disabled:
@@ -56,10 +67,12 @@ class PrimaryButton extends StatelessWidget {
         ),
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: textColor, // Couleur du texte selon l'état
             fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'DM Sans',
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
