@@ -38,6 +38,14 @@ class OutlineButton extends StatelessWidget {
         borderColor = Color(0xFF6C33FF);
         textColor = Color(0xFF6C33FF);
         break;
+      case ButtonState.tertiary:
+        borderColor = AppColors.tertiaryColor;
+        textColor = AppColors.tertiaryColor;
+        break;
+      case ButtonState.tertiaryPressed:
+        borderColor = Color(0xFF59E635);
+        textColor = Color(0xFF59E635);
+        break;
       case ButtonState.disabled:
         borderColor = Color(0xFFBFBFBF);
         textColor = Color(0xFFBFBFBF);

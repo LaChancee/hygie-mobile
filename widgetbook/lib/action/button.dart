@@ -27,22 +27,6 @@ Widget disabledButton(BuildContext context) {
     state: ButtonState.disabled,
   );
 }
-
-@UseCase(name: 'Outlined', type: OutlineButton)
-Widget outlinePrimaryButton(BuildContext context) {
-  return OutlineButton(
-  text: 'Primary',
-      state: ButtonState.primary
-  );
-}
-@UseCase(name: 'OutlinedPressed', type: OutlineButton)
-Widget outlinePressedPrimaryButton(BuildContext context) {
-  return OutlineButton(
-  text: 'Pressed',
-      state: ButtonState.primary
-  );
-}
-
 @UseCase(name: 'Secondary', type: ButtonWithoutIcon)
 Widget secondaryButton(BuildContext context) {
   return ButtonWithoutIcon(
@@ -59,17 +43,19 @@ Widget secondaryPressedButton(BuildContext context) {
   );
 }
 
-@UseCase(name: 'Outlined', type: OutlineButton)
-Widget outlineSecondaryButton(BuildContext context) {
-  return OutlineButton(
-      text: 'Secondary',
-      state: ButtonState.secondary
+@UseCase(name: 'Tertiary', type: ButtonWithoutIcon)
+Widget tertiaryButton(BuildContext context) {
+  return ButtonWithoutIcon(
+    text: 'Tertiary',
+    state: ButtonState.tertiary,
   );
 }
-@UseCase(name: 'OutlinedPressed', type: OutlineButton)
-Widget outlinePressedSecondaryButton(BuildContext context) {
-  return OutlineButton(
-      text: 'Pressed',
-      state: ButtonState.secondaryPressed
+
+@UseCase(name: 'TertiaryPressed', type: ButtonWithoutIcon)
+Widget tertiaryPressedButton(BuildContext context) {
+  return ButtonWithoutIcon(
+    text: 'Pressed',
+    state: ButtonState.tertiaryPressed,
   );
 }
+
