@@ -9,22 +9,41 @@ enum IconButtonState {
   tertiary,
   disabled,
 }
+enum IconButtonSize { small, medium }
 
 class IconButtonCustom extends StatelessWidget {
   final Icon icon;
   final IconButtonState state;
   final VoidCallback? onPressed;
+  final IconButtonSize size;
 
   const IconButtonCustom({
     super.key,
     required this.icon,
     required this.state,
     this.onPressed,
+    this.size = IconButtonSize.medium, // Taille par défaut
   });
 
   @override
   Widget build(BuildContext context) {
-    // Détermine les styles selon l'état
+    // Dimensions et styles selon la taille
+    double width, height, padding;
+
+    switch (size) {
+      case IconButtonSize.small:
+        width = 72;
+        height = 37;
+        padding = 8;
+        break;
+      case IconButtonSize.medium:
+        width = 72;
+        height = 53;
+        padding = 16;
+        break;
+    }
+
+    // Styles selon l'état
     Color backgroundColor;
     bool isDisabled = false;
 
@@ -33,16 +52,13 @@ class IconButtonCustom extends StatelessWidget {
         backgroundColor = AppColors.primaryColor;
         break;
       case IconButtonState.pressed:
-        backgroundColor = const Color(0xFF0A409E); // Couleur foncée pour "pressed"
+        backgroundColor = const Color(0xFF0A409E);
         break;
       case IconButtonState.secondary:
         backgroundColor = AppColors.secondaryColor;
         break;
       case IconButtonState.tertiary:
         backgroundColor = AppColors.tertiaryColor;
-        break;
-      case IconButtonState.pressed:
-        backgroundColor = const Color(0xFF0A409E); // Couleur foncée pour "pressed"
         break;
       case IconButtonState.disabled:
         backgroundColor = Colors.grey;
@@ -51,25 +67,25 @@ class IconButtonCustom extends StatelessWidget {
     }
 
     return AnimatedOpacity(
-      opacity: isDisabled ? 0.6 : 1.0, // Réduction de l'opacité si désactivé
-      duration: const Duration(milliseconds: 300), // Animation fluide
+      opacity: isDisabled ? 0.6 : 1.0,
+      duration: const Duration(milliseconds: 300),
       child: GestureDetector(
-        onTap: isDisabled ? null : onPressed, // Désactive l'action si nécessaire
+        onTap: isDisabled ? null : onPressed,
         child: Container(
-          width: 72,
-          height: 53,
-          padding: const EdgeInsets.all(16),
+          width: width,
+          height: height,
+          padding: EdgeInsets.all(padding),
           decoration: ShapeDecoration(
             color: backgroundColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(999), // Coins arrondis
+              borderRadius: BorderRadius.circular(999),
             ),
           ),
           child: Center(
             child: SizedBox(
               width: 24,
               height: 24,
-              child: icon, // Icône au centre
+              child: icon,
             ),
           ),
         ),
@@ -77,3 +93,4 @@ class IconButtonCustom extends StatelessWidget {
     );
   }
 }
+

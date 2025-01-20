@@ -23,25 +23,7 @@ Widget primaryButtonWithIconRight(BuildContext context) {
   );
 }
 
-@UseCase(name: 'Pressed with Icon Left', type: ButtonWithIcon)
-Widget pressedButtonWithIconLeft(BuildContext context) {
-  return ButtonWithIcon(
-    text: 'Pressed',
-    state: ButtonState.pressed,
-    icon: const Icon(Icons.warning, color: Colors.white),
-    iconPosition: IconPosition.left,
-  );
-}
 
-@UseCase(name: 'Pressed with Icon Right', type: ButtonWithIcon)
-Widget pressedButtonWithIconRight(BuildContext context) {
-  return ButtonWithIcon(
-    text: 'Pressed',
-    state: ButtonState.pressed,
-    icon: const Icon(Icons.warning, color: Colors.white),
-    iconPosition: IconPosition.right,
-  );
-}
 
 @UseCase(name: 'Disabled with Icon', type: ButtonWithIcon)
 Widget disabledButtonWithIcon(BuildContext context) {

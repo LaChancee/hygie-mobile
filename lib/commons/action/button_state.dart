@@ -3,9 +3,6 @@ enum ButtonState {
   primary,
   secondary,
   tertiary,
-  secondaryPressed,
-  tertiaryPressed,
-  pressed,
   disabled,
 
 }

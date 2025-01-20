@@ -34,24 +34,12 @@ class ButtonWithIcon extends StatelessWidget {
         backgroundColor = AppColors.primaryColor;
         textColor = Colors.white;
         break;
-      case ButtonState.pressed:
-        backgroundColor = Color(0xFF0A409E);
-        textColor = Colors.white;
-        break;
       case ButtonState.secondary:
         backgroundColor = AppColors.secondaryColor;
         textColor = Colors.white;
         break;
-      case ButtonState.secondaryPressed:
-        backgroundColor = Color(0xFF6C33FF);
-        textColor = Colors.white;
-        break;
       case ButtonState.tertiary:
         backgroundColor = AppColors.tertiaryColor;
-        textColor = Color(0xFF222222);
-        break;
-      case ButtonState.tertiaryPressed:
-        backgroundColor = Color(0xFF59E635);
         textColor = Color(0xFF222222);
         break;
       case ButtonState.disabled:

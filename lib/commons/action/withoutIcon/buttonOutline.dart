@@ -2,21 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/ui/colors.dart';
 import 'package:hygie_mobile/commons/action/button_state.dart';
 
+enum ButtonSize { small, medium }
 
-// Widget du bouton personnalisé
+// Widget du bouton Outlined personnalisé
 class OutlineButton extends StatelessWidget {
   final String text;
   final ButtonState state;
+  final ButtonSize size;
 
   const OutlineButton({
     super.key,
     required this.text,
     required this.state,
+    this.size = ButtonSize.medium, // Taille par défaut : medium
   });
 
   @override
   Widget build(BuildContext context) {
-    // Sélection de la couleur de la bordure, du texte et d'autres styles selon l'état du bouton
+    // Définir les styles de taille selon ButtonSize
+    double paddingHorizontal, paddingVertical, fontSize;
+
+    switch (size) {
+      case ButtonSize.small:
+        paddingHorizontal = 16;
+        paddingVertical = 8;
+        fontSize = 14;
+        break;
+      case ButtonSize.medium:
+        paddingHorizontal = 24;
+        paddingVertical = 16;
+        fontSize = 16;
+        break;
+    }
+
+    // Sélection de la couleur de la bordure et du texte selon l'état du bouton
     Color borderColor;
     Color textColor;
     bool isDisabled = false;
@@ -26,25 +45,13 @@ class OutlineButton extends StatelessWidget {
         borderColor = AppColors.primaryColor;
         textColor = AppColors.primaryColor;
         break;
-      case ButtonState.pressed:
-        borderColor = Color(0xFF044BD9);
-        textColor = Color(0xFF044BD9);
-        break;
       case ButtonState.secondary:
         borderColor = AppColors.secondaryColor;
         textColor = AppColors.secondaryColor;
         break;
-      case ButtonState.secondaryPressed:
-        borderColor = Color(0xFF6C33FF);
-        textColor = Color(0xFF6C33FF);
-        break;
       case ButtonState.tertiary:
         borderColor = AppColors.tertiaryColor;
         textColor = AppColors.tertiaryColor;
-        break;
-      case ButtonState.tertiaryPressed:
-        borderColor = Color(0xFF59E635);
-        textColor = Color(0xFF59E635);
         break;
       case ButtonState.disabled:
         borderColor = Color(0xFFBFBFBF);
@@ -61,10 +68,13 @@ class OutlineButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           side: BorderSide(
             color: borderColor, // Couleur de la bordure selon l'état
-            width: 2,
+            width: 2, // Largeur de la bordure
           ),
-          backgroundColor: Colors.transparent, // Fond transparent pour le bouton outlined
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          backgroundColor: Colors.transparent, // Fond transparent
+          padding: EdgeInsets.symmetric(
+            horizontal: paddingHorizontal,
+            vertical: paddingVertical,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(999), // Bords arrondis
           ),
@@ -75,7 +85,7 @@ class OutlineButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: textColor, // Couleur du texte selon l'état
-            fontSize: 16,
+            fontSize: fontSize,
             fontFamily: 'DM Sans',
             fontWeight: FontWeight.w500,
           ),
