@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/profil/profil_screen.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -32,10 +33,18 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: [
         if (showProfileImage)
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
+          GestureDetector(
+            onTap: () {
+              // Naviguer vers l'écran profil
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
+              ),
             ),
           ),
       ],

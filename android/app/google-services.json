@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "487775523474",
+    "project_id": "hygie-bc43a",
+    "storage_bucket": "hygie-bc43a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487775523474:android:1f64ae7c098f402983cc4b",
+        "android_client_info": {
+          "package_name": "com.hygie_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487775523474-fpcr891tu0npk471cf25vsndeu1u9uu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL_dXr9WH9f1cVYeeIoz-SXT0JgklJ87A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487775523474-fpcr891tu0npk471cf25vsndeu1u9uu8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487775523474-ck6ou3ius2tpndm1ab8p2k1k95bp2ov2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hygieMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
