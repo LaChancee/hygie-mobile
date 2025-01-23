@@ -61,9 +61,14 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   fonts:
+    - family: DM Sans
+      fonts:
+        - asset: custom_fonts/fonts/DMSans-Regular.ttf
     - family: NotoSans
       fonts:
         - asset: custom_fonts/fonts/NotoSans-Regular.ttf
+
+
 
 
 
