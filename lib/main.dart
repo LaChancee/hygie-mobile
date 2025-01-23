@@ -5,12 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hygie_mobile/presentation/authentification/auth_screen.dart';
 import 'package:hygie_mobile/presentation/home_page.dart';
 import 'commons/colors.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  WidgetsFlutterBinding.ensureInitialized(); // Pour assurer l'initialisation correcte
+  await initializeDateFormatting('fr', null); // Charge les données pour le français
   runApp(const MyApp());
 }
 
