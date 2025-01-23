@@ -1,5 +1,7 @@
 name: widgetbook_workspace
 # ...
+flutter:
+  uses-material-design: true
 
 dependencies:
   widgetbook_annotation: ^3.2.0
