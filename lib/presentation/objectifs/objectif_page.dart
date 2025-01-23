@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'progression_page';
+import 'choisir_objectif_page.dart';
 
 class ObjectifsPage extends StatefulWidget {
   @override
@@ -163,6 +164,12 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
               title,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+                        onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChoisirObjectifPage(category: 'Choisir un objectif')),
+              );
+            },
           ),
         ),
       ),
