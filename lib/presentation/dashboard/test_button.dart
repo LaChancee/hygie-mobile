@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hygie_mobile/commons/colors.dart';
+import 'package:hygie_mobile/commons/ui/colors.dart';
 
 class TestButton extends StatelessWidget {
   const TestButton({Key? key}) : super(key: key);
