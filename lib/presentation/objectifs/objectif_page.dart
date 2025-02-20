@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/header.dart';
-import 'progression_page';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'progression_page.dart';
 import 'choisir_objectif_page.dart';
 
 class ObjectifsPage extends StatefulWidget {
@@ -9,9 +11,6 @@ class ObjectifsPage extends StatefulWidget {
 }
 
 class _ObjectifsPageState extends State<ObjectifsPage> {
-  bool showHealthGoals = false;
-  bool showSavingsGoals = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,158 +18,221 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Header(title: ""),
-            SizedBox(height: 20),
+            SizedBox(height: 16), // Espacement entre le header et les objectifs
+            MesObjectifs(),
+            SizedBox(height: 32), // Espacement avant la liste des objectifs
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('objectif')
+                  .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Erreur lors du chargement des objectifs'));
+                }
 
-            // Rubrique Objectifs de santé
-            _buildGoalSection(
-              title: 'Objectif de santé',
-              icon: Icons.local_fire_department,
-              expanded: showHealthGoals,
-              onTap: () {
-                setState(() {
-                  showHealthGoals = !showHealthGoals;
-                });
+                final userObjectives = snapshot.data?.docs.map((doc) {
+                  final objective = doc.data() as Map<String, dynamic>;
+                  return {
+                    'description': objective['description'],
+                    'type': objective['type'],
+                  };
+                }).toList() ?? [];
+
+                return Column(
+                  children: [
+                    if (userObjectives.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: userObjectives.length,
+                        itemBuilder: (context, index) {
+                          final objective = userObjectives[index];
+                          return Column(
+                            children: [
+                              _buildGoalSection(
+                                title: objective['description'],
+                                subtitle: 'Objectif ${objective['type']}',
+                                icon: objective['type'] == 'sante'
+                                    ? Icons.local_fire_department
+                                    : Icons.savings,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProgressionPage(
+                                        type: objective['type'],
+                                        title: objective['description'], // Passez le titre ici
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 20), // Espacement entre les rubriques
+                            ],
+                          );
+                        },
+                      )
+                    else
+                      Column(
+                        children: [
+                          Center(child: Text('Aucun objectif trouvé.')),
+                          SizedBox(height: 40), // Espacement entre le message et le bouton
+                        ],
+                      ),
+                    // Affichage du bouton "Me fixer un objectif"
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: AddButton(),
+                    ),
+                  ],
+                );
               },
-              subOptions: showHealthGoals
-                  ? [
-                      _buildSubOption(context, 'Tabac', 'Objectifs validés 2/46', 'Tabac', Colors.blue[50]!),
-                      SizedBox(height: 10), // Espace entre Tabac et Alcool
-                      _buildSubOption(context, 'Alcool', 'Objectifs validés 1/10', 'Alcool', Colors.blue[50]!),
-                      SizedBox(height: 20), // Espacement ajouté en dessous de la carte Alcool
-                    ]
-                  : [],
             ),
-            SizedBox(height: 20),
-
-            // Rubrique Objectifs d'épargne avec les mêmes espacements
-            _buildGoalSection(
-              title: 'Objectif d\'épargne',
-              icon: Icons.savings,
-              expanded: showSavingsGoals,
-              onTap: () {
-                setState(() {
-                  showSavingsGoals = !showSavingsGoals;
-                });
-              },
-              subOptions: showSavingsGoals
-                  ? [
-                      _buildSubOption(context, 'Tabac', 'Objectifs validés 2/46', 'Tabac', Colors.blue[50]!),
-                      SizedBox(height: 10), // Espace entre Tabac et Alcool
-                      _buildSubOption(context, 'Alcool', 'Objectifs validés 1/10', 'Alcool', Colors.blue[50]!),
-                      SizedBox(height: 20), // Espacement ajouté en dessous de la carte Alcool pour épargne
-                    ]
-                  : [],
-            ),
-            SizedBox(height: 20),
-
-            // Rubrique Se fixer un objectif
-            _buildSimpleTile('Se fixer un objectif', Icons.add),
+            SizedBox(height: 40), // Espacement en bas de la page
           ],
         ),
       ),
     );
   }
 
-  // Widget pour les rubriques d'objectif avec icône et options
   Widget _buildGoalSection({
     required String title,
+    required String subtitle,
     required IconData icon,
-    required bool expanded,
     required VoidCallback onTap,
-    required List<Widget> subOptions,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 0, // Suppression de l'ancienne élévation
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2), // Ombrage léger et discret
-                spreadRadius: 2,
-                blurRadius: 5,
-              ),
-            ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        constraints: BoxConstraints(
+          minHeight: 94, // Hauteur minimale dynamique
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: Column(
-            children: [
-              ListTile(
-                leading: Icon(icon, color: Color.fromRGBO(4, 75, 217, 1)),
-                title: Text(
-                  title,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          shadows: [
+            BoxShadow(
+              color: Color(0x19072250),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: ShapeDecoration(
+                color: Color(0xFFDFE6EE),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
                 ),
-                trailing: Icon(expanded ? Icons.expand_less : Icons.expand_more),
-                onTap: onTap,
               ),
-              if (expanded) ...subOptions,
-            ],
-          ),
+              child: Icon(icon, color: Color.fromRGBO(4, 75, 217, 1)),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Color(0xFF222222),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Color(0xFF707070),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  // Widget pour les sous-options (Tabac, Alcool) sans ombrage
-  Widget _buildSubOption(BuildContext context, String label, String subtitle, String type, Color backgroundColor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        color: backgroundColor, // Couleur de fond uniforme
-        elevation: 0, // Suppression de l'ombrage pour les sous-options
-        child: ListTile(
-          title: Text(label),
-          subtitle: Text(subtitle),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProgressionPage(type: type)),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  // Widget pour une simple rubrique (comme "Se fixer un objectif") avec ombrage discret
-  Widget _buildSimpleTile(String title, IconData icon) {
+class MesObjectifs extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 0, // Suppression de l'ancienne élévation
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2), // Ombrage léger
-                spreadRadius: 2,
-                blurRadius: 5,
-              ),
-            ],
-          ),
-          child: ListTile(
-            leading: Icon(icon, color: Colors.black),
-            title: Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      child: Column(
+        children: [
+          Text(
+            'Mes objectifs',
+            style: TextStyle(
+              color: Color(0xFF222222),
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
-                        onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChoisirObjectifPage(category: 'Choisir un objectif')),
-              );
-            },
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChoisirObjectifPage(
+                    category: 'Choisir un objectif',
+                  )),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 94,
+        padding: const EdgeInsets.all(16),
+        decoration: ShapeDecoration(
+          color: Color(0xFF044BD9),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.add, color: Colors.white),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                'Me fixer un objectif',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

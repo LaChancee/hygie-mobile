@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hygie_mobile/presentation/journal/add_button.dart';
 
 class JournalPage extends StatefulWidget {
   const JournalPage({Key? key}) : super(key: key);
@@ -139,6 +140,14 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
               ],
             ),
           ),
+          const SizedBox(height: 20),
+
+          // Bouton "Ajouter une activité"
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: AddButton(),
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

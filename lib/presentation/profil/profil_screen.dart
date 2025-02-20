@@ -18,9 +18,33 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                        border: Border.all(
+                          color: Colors.white, // Bordure blanche
+                          width: 2,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(4), // Espacement autour de l'icône
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Colors.white, // Icône en blanc pour contraste
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),

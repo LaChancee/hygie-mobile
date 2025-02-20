@@ -27,7 +27,6 @@ class _ConsommationFormScreenState extends State<ConsommationFormScreen> {
         'type': type,
         'quantité': quantite,
         'dateConsommation': now.toIso8601String(),
-        'objectifId': null, // Ajoutez un objectifId si nécessaire
         'createdAt': now.toIso8601String(),
         'updatedAt': now.toIso8601String(),
       };
