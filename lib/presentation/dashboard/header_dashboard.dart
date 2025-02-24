@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/ui/colors.dart';
-import 'package:hygie_mobile/presentation/dashboard/consommation_form_screen.dart';
+import 'package:hygie_mobile/presentation/journal/journal_page.dart';
 
 class HeaderDashboard extends StatelessWidget {
   @override
@@ -49,7 +49,7 @@ class HeaderDashboard extends StatelessWidget {
                         () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ConsommationFormScreen(),
+                              builder: (context) => JournalPage(openAddActivityModal: true),
                             ),
                           );
                         },

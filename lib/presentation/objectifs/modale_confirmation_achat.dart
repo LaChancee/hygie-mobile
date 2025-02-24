@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class ModaleConfirmationAchat extends StatefulWidget {
   final String titre;
   final int points;
+  final bool isCompleted;
 
   const ModaleConfirmationAchat({
     required this.titre,
     required this.points,
+    required this.isCompleted,
   });
 
   @override
@@ -31,42 +33,51 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
             ),
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 238,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 153,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            widget.titre,
-                            style: TextStyle(
-                              color: Color(0xFF222222),
-                              fontSize: 20,
-                              fontFamily: 'DM Sans',
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        widget.titre,
+                        style: TextStyle(
+                          color: Color(0xFF222222),
+                          fontSize: 20,
+                          fontFamily: 'DM Sans',
+                          fontWeight: FontWeight.w700,
                         ),
-                        const SizedBox(height: 8),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'La libération d\'adrénaline causée par le tabac augmente la pression artérielle. Le risque d\'infarctus et de maladies cardiaques augmente. Après 12 heures, la tension artérielle revient doucement à la normale, allégeant le poids sur votre cœur.',
+                      style: TextStyle(
+                        color: Color(0xFF222222),
+                        fontSize: 14,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Text(
-                          'La libération d\'adrénaline causée par le tabac augmente la pression artérielle. Le risque d\'infarctus et de maladies cardiaques augmente. Après 12 heures, la tension artérielle revient doucement à la normale, allégeant le poids sur votre cœur.',
+                          widget.isCompleted
+                              ? (_isValidated
+                                  ? 'Palier déjà validé, récompense déjà versée.'
+                                  : 'Votre cagnotte après validation sera de : ')
+                              : 'Cet objectif n\'a pas encore été atteint.',
                           style: TextStyle(
                             color: Color(0xFF222222),
                             fontSize: 14,
@@ -74,106 +85,93 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Votre cagnotte après validation sera de : ',
-                              style: TextStyle(
-                                color: Color(0xFF222222),
-                                fontSize: 14,
-                                fontFamily: 'DM Sans',
-                                fontWeight: FontWeight.w400,
-                              ),
+                        if (widget.isCompleted && !_isValidated)
+                          Text(
+                            '${widget.points}',
+                            style: TextStyle(
+                              color: Color(0xFF222222),
+                              fontSize: 16,
+                              fontFamily: 'DM Sans',
+                              fontWeight: FontWeight.w600,
                             ),
-                            Text(
-                              '${widget.points}',
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context); // Fermer la modale
+                      },
+                      child: Container(
+                        height: 53,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFF8352FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Fermer',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'DM Sans',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (widget.isCompleted && !_isValidated) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isValidated = true;
+                          });
+                          // Ajoutez ici la logique pour valider les points
+                        },
+                        child: Container(
+                          height: 53,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          decoration: ShapeDecoration(
+                            color: Color(0xFF044BD9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Valider',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Color(0xFF222222),
+                                color: Colors.white,
                                 fontSize: 16,
                                 fontFamily: 'DM Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context); // Fermer la modale
-                          },
-                          child: Container(
-                            height: 53,
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                            decoration: ShapeDecoration(
-                              color: Color(0xFF8352FF),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(999),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Fermer',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: 'DM Sans',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
                           ),
                         ),
                       ),
-                      if (!_isValidated) ...[
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isValidated = true;
-                              });
-                            },
-                            child: Container(
-                              height: 53,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                              decoration: ShapeDecoration(
-                                color: Color(0xFF044BD9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(999),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Valider',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'DM Sans',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

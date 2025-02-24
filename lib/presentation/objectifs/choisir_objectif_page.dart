@@ -63,7 +63,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                     'Aucune consommation pendant 10 jours',
                     '8 juin 2024, 21:48',
                     Color(0xFFDDD4FF),
-                    '+ 32',
+                    'santé',
+                    '+ 30', // Points en dur
                   ),
                   SizedBox(height: 16),
                   _buildGoalOption(
@@ -71,6 +72,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                     'Je me laisse un mois pour arrêter de consommer',
                     'Objectif santé',
                     Color(0xFFDFE6EE),
+                    'santé',
+                    '+ 90', // Points en dur
                   ),
                   SizedBox(height: 16),
                   _buildGoalOption(
@@ -78,6 +81,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                     'Je me laisse une semaine pour arrêter de consommer',
                     'Objectif santé',
                     Color(0xFFDFE6EE),
+                    'santé',
+                    '+ 21', // Points en dur
                   ),
                   SizedBox(height: 16),
                   _buildGoalOption(
@@ -85,6 +90,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                     'Je veux arrêter de consommer dès aujourd’hui',
                     'Objectif santé',
                     Color(0xFFDFE6EE),
+                    'santé',
+                    '+ 1', // Points en dur
                   ),
                   SizedBox(height: 16),
                   _buildGoalOption(
@@ -92,6 +99,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                     'Je veux réaliser des économies',
                     'Objectif épargne',
                     Color(0xFFDDD4FF),
+                    'épargne',
+                    '+ 50', // Points en dur
                   ),
                 ],
               ),
@@ -103,7 +112,7 @@ class ChoisirObjectifPage extends StatelessWidget {
   }
 
   // Widget pour afficher chaque objectif dans la liste
-  Widget _buildGoalOption(BuildContext context, String title, String subtitle, Color backgroundColor, [String? points]) {
+  Widget _buildGoalOption(BuildContext context, String title, String subtitle, Color backgroundColor, String type, [String? points]) {
     return GestureDetector(
       onTap: () {
         _showModalBottomSheet(context, title);
@@ -136,7 +145,7 @@ class ChoisirObjectifPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              child: Icon(Icons.health_and_safety, color: Colors.green), // Utilisation de l'icône de santé
+              child: _getIconForGoalType(type), // Utilisation de l'icône appropriée
             ),
             SizedBox(width: 16),
             Expanded(
@@ -197,6 +206,22 @@ class ChoisirObjectifPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Retourne l'icône appropriée pour le type d'objectif
+  Widget _getIconForGoalType(String type) {
+    switch (type) {
+      case 'santé':
+        return const Icon(Icons.health_and_safety, color: Color.fromRGBO(4, 75, 217, 1));
+      case 'épargne':
+        return const Icon(Icons.savings, color: Color.fromRGBO(4, 75, 217, 1));
+      case 'alcool':
+        return const Icon(Icons.local_bar, color: Color.fromRGBO(4, 75, 217, 1));
+      case 'tabac':
+        return const Icon(Icons.smoking_rooms, color: Color.fromRGBO(4, 75, 217, 1));
+      default:
+        return const Icon(Icons.help_outline, color: Colors.grey);
+    }
   }
 
   void _showModalBottomSheet(BuildContext context, String selectedGoal) {

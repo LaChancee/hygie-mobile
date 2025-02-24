@@ -377,7 +377,7 @@ class _ModaleAddActivityState extends State<ModaleAddActivity> {
         'updatedAt': DateTime.now().toIso8601String(),
       };
 
-      await firestore.collection('activites').add(activityData);
+      await firestore.collection('consommations').add(activityData);
     } else {
       // Gérer le cas où l'utilisateur n'est pas connecté
       print('Aucun utilisateur connecté');

@@ -14,15 +14,15 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Header(title: ""),
-            SizedBox(height: 16), // Espacement entre le header et les objectifs
-            MesObjectifs(),
-            SizedBox(height: 32), // Espacement avant la liste des objectifs
-            StreamBuilder<QuerySnapshot>(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Header(title: ""),
+          SizedBox(height: 16), // Espacement entre le header et les objectifs
+          MesObjectifs(),
+          SizedBox(height: 32), // Espacement avant la liste des objectifs
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('objectif')
                   .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
@@ -38,6 +38,7 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                 final userObjectives = snapshot.data?.docs.map((doc) {
                   final objective = doc.data() as Map<String, dynamic>;
                   return {
+                    'id': doc.id, // Ajoutez l'ID du document ici
                     'description': objective['description'],
                     'type': objective['type'],
                   };
@@ -46,36 +47,35 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                 return Column(
                   children: [
                     if (userObjectives.isNotEmpty)
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: userObjectives.length,
-                        itemBuilder: (context, index) {
-                          final objective = userObjectives[index];
-                          return Column(
-                            children: [
-                              _buildGoalSection(
-                                title: objective['description'],
-                                subtitle: 'Objectif ${objective['type']}',
-                                icon: objective['type'] == 'sante'
-                                    ? Icons.local_fire_department
-                                    : Icons.savings,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProgressionPage(
-                                        type: objective['type'],
-                                        title: objective['description'], // Passez le titre ici
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: userObjectives.length,
+                          itemBuilder: (context, index) {
+                            final objective = userObjectives[index];
+                            return Column(
+                              children: [
+                                _buildGoalSection(
+                                  title: objective['description'],
+                                  subtitle: 'Objectif ${objective['type']}',
+                                  icon: _getIconForGoalType(objective['type']),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressionPage(
+                                          type: objective['type'],
+                                          title: objective['description'],
+                                          objectifId: objective['id'], // Passez l'ID ici
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              SizedBox(height: 20), // Espacement entre les rubriques
-                            ],
-                          );
-                        },
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 20), // Espacement entre les rubriques
+                              ],
+                            );
+                          },
+                        ),
                       )
                     else
                       Column(
@@ -84,18 +84,16 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                           SizedBox(height: 40), // Espacement entre le message et le bouton
                         ],
                       ),
-                    // Affichage du bouton "Me fixer un objectif"
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: AddButton(),
-                    ),
                   ],
                 );
               },
             ),
-            SizedBox(height: 40), // Espacement en bas de la page
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: AddButton(),
       ),
     );
   }
@@ -172,6 +170,22 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
       ),
     );
   }
+
+  /// Retourne l'icône appropriée pour le type d'objectif
+  IconData _getIconForGoalType(String type) {
+    switch (type) {
+      case 'santé':
+        return Icons.health_and_safety;
+      case 'épargne':
+        return Icons.savings;
+      case 'Alcool':
+        return Icons.local_bar;
+      case 'Tabac':
+        return Icons.smoking_rooms;
+      default:
+        return Icons.help_outline;
+    }
+  }
 }
 
 class MesObjectifs extends StatelessWidget {
@@ -209,18 +223,53 @@ class AddButton extends StatelessWidget {
         );
       },
       child: Container(
-        width: double.infinity,
-        height: 94,
+        width: MediaQuery.of(context).size.width - 32, // Prendre toute la largeur de l'écran avec une marge de 16 de chaque côté
+        height: 72,
         padding: const EdgeInsets.all(16),
+        clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color: Color(0xFF044BD9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          shadows: [
+            BoxShadow(
+              color: Color(0x19072250),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
+            )
+          ],
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.add, color: Colors.white),
+            Container(
+              padding: const EdgeInsets.all(8),
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: Color(0xFFDAE0F6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(),
+                    child: Icon(Icons.add, color: Color(0xFF044BD9)),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
@@ -228,6 +277,7 @@ class AddButton extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
+                  fontFamily: 'DM Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),

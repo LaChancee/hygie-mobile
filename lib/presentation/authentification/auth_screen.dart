@@ -49,7 +49,8 @@ class _AuthScreenState extends State<AuthScreen> {
           'passwordHash': "", // Hash du mot de passe (optionnel)
           'accounts': [], // Liste vide pour les comptes liés
           'feedbacks': [], // Liste vide pour les feedbacks
-          'consommation': {} // Objet vide pour les consommations
+          'consommation': {}, // Objet vide pour les consommations
+          'points': 0, // Initialisation des points à 0
         });
 
         // Assurez-vous que le widget est toujours monté avant de naviguer
