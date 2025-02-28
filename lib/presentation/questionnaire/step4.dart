@@ -34,7 +34,8 @@ class _Step4State extends State<Step4> {
               // Icône retour
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: Icon(Icons.arrow_back, color: Colors.black, size: screenWidth * 0.08),
+                child: Icon(Icons.arrow_back,
+                    color: Colors.black, size: screenWidth * 0.08),
               ),
 
               SizedBox(height: screenHeight * 0.04),
@@ -117,47 +118,50 @@ class _Step4State extends State<Step4> {
                         ),
                       ),
                     ),
-                    suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                    suffixIconConstraints:
+                        BoxConstraints(minWidth: 0, minHeight: 0),
                   ),
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.05),
+              Spacer(), // Pousse le bouton vers le bas
 
               // Bouton "Suivant"
-              GestureDetector(
-                onTap: isButtonEnabled
-                    ? () {
-                        print("Budget tabac : ${_controller.text} €");
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Step5()),
-                      );
-                      }
-                    : null,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                  decoration: BoxDecoration(
-                    color: isButtonEnabled ? Color(0xFF044BD9) : Color(0xFFBFBFBF),
-                    borderRadius: BorderRadius.circular(999),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isButtonEnabled
+                      ? () {
+                          print("Budget tabac : ${_controller.text} €");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Step5()),
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        isButtonEnabled ? Color(0xFF044BD9) : Color(0xFFBFBFBF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                   ),
-                  child: Center(
-                    child: Text(
-                      'Suivant',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.045,
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w600,
-                      ),
+                  child: Text(
+                    'Suivant',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.05),
+              SizedBox(height: screenHeight * 0.05), // Ajout d’espace en bas
             ],
           ),
         ),

@@ -11,7 +11,7 @@ class ContentsArrival extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: FractionallySizedBox(
         widthFactor:
-            0.9, // Ajuster la largeur en fonction de la taille de l'écran
+            0.95, // Ajuster la largeur en fonction de la taille de l'écran
         child: Container(
           padding: const EdgeInsets.only(
             top: 24,
@@ -49,7 +49,7 @@ class ContentsArrival extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF222222),
                     fontSize: 16,
-                    fontFamily: 'DM sans',
+                    fontFamily: 'DM Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -90,7 +90,7 @@ class ContentsArrival extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontFamily: 'DM sans',
+                                fontFamily: 'DM Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -120,7 +120,7 @@ class ContentsArrival extends StatelessWidget {
                             style: TextStyle(
                               color: Color(0xFF8352FF),
                               fontSize: 16,
-                              fontFamily: 'DM sans',
+                              fontFamily: 'DM Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),

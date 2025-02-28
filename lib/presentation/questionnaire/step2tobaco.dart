@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/step3.dart';
 
-// Widget InputSelect réutilisable
 class InputSelect extends StatefulWidget {
   final List<String> options;
   final String label;
@@ -90,7 +89,6 @@ class _InputSelectState extends State<InputSelect> {
   }
 }
 
-// Écran Step3
 class Step2 extends StatefulWidget {
   @override
   _Step2State createState() => _Step2State();
@@ -108,98 +106,99 @@ class _Step2State extends State<Step2> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8FC),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.03),
 
-                // Icône retour
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back, color: Colors.black, size: 32),
+              // Icône retour
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(Icons.arrow_back, color: Colors.black, size: 32),
+              ),
+
+              SizedBox(height: screenHeight * 0.03),
+
+              // Titre principal
+              Text(
+                'Pour commencer',
+                style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: screenWidth * 0.08,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
 
-                SizedBox(height: 30),
+              SizedBox(height: screenHeight * 0.02),
 
-                // Titre principal
-                Text(
-                  'Pour commencer',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: 32,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                  ),
+              // Texte descriptif
+              Text(
+                'En moyenne, combien de jours par semaine fumez-vous ?',
+                style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: screenWidth * 0.045,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
 
-                SizedBox(height: 16),
+              SizedBox(height: screenHeight * 0.03),
 
-                // Texte descriptif
-                Text(
-                  'En moyenne, combien de jours par semaine fumez-vous ?',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: 14,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+              // Sélecteur InputSelect
+              InputSelect(
+                label: "Consommation par semaine",
+                initialValue: selectedOption,
+                options: options,
+                onChanged: (value) {
+                  setState(() {
+                    selectedOption = value;
+                  });
+                },
+              ),
 
-                SizedBox(height: 20),
+              Spacer(), // Pousse le bouton vers le bas
 
-                // Sélecteur InputSelect
-                InputSelect(
-                  label: "Consommation par semaine",
-                  initialValue: selectedOption,
-                  options: options,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedOption = value;
-                    });
-                  },
-                ),
-
-                SizedBox(height: 40),
-
-                // Bouton "Suivant"
-                GestureDetector(
-                  onTap: () {
+              // Bouton "Suivant"
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
                     Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Step3()), // Naviguer vers Step2
-          );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Step3()), // Naviguer vers Step3
+                    );
                   },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF044BD9),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF044BD9),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
-                    child: Center(
-                      child: Text(
-                        'Suivant',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                    padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
+                  ),
+                  child: Text(
+                    'Suivant',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+              ),
 
-                SizedBox(height: 30), // Ajout d’un espace en bas
-              ],
-            ),
+              SizedBox(height: screenHeight * 0.03), // Ajout d’un espace en bas
+            ],
           ),
         ),
       ),

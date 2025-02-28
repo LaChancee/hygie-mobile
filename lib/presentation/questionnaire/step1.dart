@@ -61,10 +61,11 @@ class _Step1State extends State<Step1> {
               // Options sélectionnables avec le style spécifique
               _buildOption('Alcool'),
               _buildOption('Tabac'),
-              SizedBox(height: screenHeight * 0.05),
+              Spacer(), // Pousse le bouton vers le bas
 
               // Bouton "Suivant"
               _buildNextButton(context),
+              SizedBox(height: screenHeight * 0.03), // Espacement en bas
             ],
           ),
         ),

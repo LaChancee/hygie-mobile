@@ -12,7 +12,8 @@ class _Step6State extends State<Step6> {
   bool isPasswordVisible = false;
 
   bool get isFormValid {
-    return emailController.text.isNotEmpty && passwordController.text.length >= 8;
+    return emailController.text.isNotEmpty &&
+        passwordController.text.length >= 8;
   }
 
   @override
@@ -23,82 +24,84 @@ class _Step6State extends State<Step6> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F8FC),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: screenHeight * 0.02),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.02),
 
-                // Icône retour
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back, color: Colors.black, size: screenWidth * 0.08),
+              // Icône retour
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(Icons.arrow_back,
+                    color: Colors.black, size: screenWidth * 0.08),
+              ),
+
+              SizedBox(height: screenHeight * 0.04),
+
+              // Titre principal
+              Text(
+                'Je crée mon compte',
+                style: TextStyle(
+                  color: const Color(0xFF222222),
+                  fontSize: screenWidth * 0.08,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
 
-                SizedBox(height: screenHeight * 0.04),
+              SizedBox(height: screenHeight * 0.02),
 
-                // Titre principal
-                Text(
-                  'Je crée mon compte',
-                  style: TextStyle(
-                    color: const Color(0xFF222222),
-                    fontSize: screenWidth * 0.08,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+              // Champ Email
+              _buildTextField(
+                label: 'Email',
+                controller: emailController,
+                hintText: 'exemple@gmail.com',
+                keyboardType: TextInputType.emailAddress,
+              ),
 
-                SizedBox(height: screenHeight * 0.02),
+              SizedBox(height: screenHeight * 0.03),
 
-                // Champ Email
-                _buildTextField(
-                  label: 'Email',
-                  controller: emailController,
-                  hintText: 'exemple@gmail.com',
-                  keyboardType: TextInputType.emailAddress,
-                ),
+              // Champ Mot de passe
+              _buildPasswordField(),
 
-                SizedBox(height: screenHeight * 0.03),
+              Spacer(), // Pousse le bouton vers le bas
 
-                // Champ Mot de passe
-                _buildPasswordField(),
-
-                SizedBox(height: screenHeight * 0.05),
-
-                // Bouton "Suivant"
-                GestureDetector(
-                  onTap: isFormValid
+              // Bouton "Suivant"
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isFormValid
                       ? () {
                           _showSuccessModal();
                         }
                       : null,
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                    decoration: BoxDecoration(
-                      color: isFormValid ? const Color(0xFF044BD9) : const Color(0xFFBFBFBF),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isFormValid
+                        ? const Color(0xFF044BD9)
+                        : const Color(0xFFBFBFBF),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
-                    child: Center(
-                      child: Text(
-                        'Suivant',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.045,
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                  ),
+                  child: Text(
+                    'Suivant',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+              ),
 
-                SizedBox(height: screenHeight * 0.05),
-              ],
-            ),
+              SizedBox(height: screenHeight * 0.05),
+            ],
           ),
         ),
       ),
@@ -109,12 +112,18 @@ class _Step6State extends State<Step6> {
   void _showSuccessModal() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
-        return Padding(
+        return Container(
           padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -135,10 +144,10 @@ class _Step6State extends State<Step6> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                 Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Dashboard()),
-                      );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Dashboard()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF044BD9),

@@ -23,94 +23,92 @@ class _Step5State extends State<Step5> {
     return Scaffold(
       backgroundColor: Color(0xFFF5F8FC),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: screenHeight * 0.02),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.02),
 
-                // Icône retour
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back,
-                      color: Colors.black, size: screenWidth * 0.08),
+              // Icône retour
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(Icons.arrow_back,
+                    color: Colors.black, size: screenWidth * 0.08),
+              ),
+
+              SizedBox(height: screenHeight * 0.04),
+
+              // Titre principal
+              Text(
+                'À propos de moi',
+                style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: screenWidth * 0.08,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
 
-                SizedBox(height: screenHeight * 0.04),
+              SizedBox(height: screenHeight * 0.02),
 
-                // Titre principal
-                Text(
-                  'À propos de moi',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: screenWidth * 0.08,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                  ),
+              // Texte descriptif
+              Text(
+                'Comment vous identifiez-vous ?',
+                style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: screenWidth * 0.045,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
 
-                SizedBox(height: screenHeight * 0.02),
+              SizedBox(height: screenHeight * 0.03),
 
-                // Texte descriptif
-                Text(
-                  'Comment vous identifiez-vous ?',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: screenWidth * 0.045,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+              // Sélection de genre
+              _buildSelectableButton('Masculin'),
+              _buildSelectableButton('Féminin'),
+              _buildSelectableButton('Non-binaire'),
 
-                SizedBox(height: screenHeight * 0.03),
+              Spacer(), // Pousse le bouton vers le bas
 
-                // Sélection de genre
-                _buildSelectableButton('Masculin'),
-                _buildSelectableButton('Féminin'),
-                _buildSelectableButton('Non-binaire'),
-
-                SizedBox(height: screenHeight * 0.05),
-
-                // Bouton "Suivant"
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: selectedGender != null
-                        ? () {
-                            Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Step6()),
-                      );
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: selectedGender != null
-                          ? Color(0xFF044BD9)
-                          : Color(0xFFBFBFBF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+              // Bouton "Suivant"
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: selectedGender != null
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Step6()),
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedGender != null
+                        ? Color(0xFF044BD9)
+                        : Color(0xFFBFBFBF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
                     ),
-                    child: Text(
-                      'Suivant',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.045,
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w600,
-                      ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                  ),
+                  child: Text(
+                    'Suivant',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+              ),
 
-                SizedBox(height: screenHeight * 0.05),
-              ],
-            ),
+              SizedBox(height: screenHeight * 0.05), // Ajout d’espace en bas
+            ],
           ),
         ),
       ),

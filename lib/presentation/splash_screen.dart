@@ -20,13 +20,24 @@ class _SplashscreenState extends State<Splashscreen> {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
+            backgroundColor: Colors.transparent, // Fond transparent
             builder: (BuildContext context) {
-              return ContentsArrival();
+              return _buildBlurredModal();
             },
           );
         }
       });
     });
+  }
+
+  Widget _buildBlurredModal() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Ajuster le flou
+      child: Container(
+        color: Colors.transparent, // Couleur de fond avec opacité
+        child: ContentsArrival(),
+      ),
+    );
   }
 
   @override
@@ -46,17 +57,20 @@ class _SplashscreenState extends State<Splashscreen> {
                   Positioned(
                     left: screenWidth * 0.65,
                     top: screenHeight * 0.45,
-                    child: _buildColoredOval(screenWidth * 0.4, screenHeight * 0.4, Color(0xB2A885FF)),
+                    child: _buildColoredOval(screenWidth * 0.4,
+                        screenHeight * 0.4, Color(0xB2A885FF)),
                   ),
                   Positioned(
                     left: screenWidth * 0.1,
                     top: screenHeight * 0.6,
-                    child: _buildColoredOval(screenWidth * 0.8, screenHeight * 0.4, Color(0xFFB2F99D)),
+                    child: _buildColoredOval(screenWidth * 0.8,
+                        screenHeight * 0.4, Color(0xFFB2F99D)),
                   ),
                   Positioned(
                     left: -screenWidth * 0.2,
                     top: screenHeight * 0.4,
-                    child: _buildColoredOval(screenWidth * 0.5, screenHeight * 0.6, Color(0xFF80D1FF)),
+                    child: _buildColoredOval(screenWidth * 0.5,
+                        screenHeight * 0.6, Color(0xFF80D1FF)),
                   ),
                 ],
               ),

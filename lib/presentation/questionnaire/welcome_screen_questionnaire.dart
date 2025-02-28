@@ -83,43 +83,6 @@ class Bienvenue extends StatelessWidget {
               ),
             ),
           ),
-
-          // Barre de statut
-          Positioned(
-            left: 0,
-            top: 0,
-            child: Container(
-              width: screenWidth,
-              height: screenHeight * 0.07,
-              decoration: const BoxDecoration(color: Colors.white),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 16),
-                  Text(
-                    '9:41',
-                    style: TextStyle(
-                      color: const Color(0xFF222222),
-                      fontSize: screenWidth * 0.045,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: EdgeInsets.only(right: screenWidth * 0.04),
-                    child: Row(
-                      children: [
-                        Icon(Icons.wifi, size: screenWidth * 0.06),
-                        SizedBox(width: screenWidth * 0.02),
-                        Icon(Icons.battery_full, size: screenWidth * 0.06),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
