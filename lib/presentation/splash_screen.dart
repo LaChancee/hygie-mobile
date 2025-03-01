@@ -48,31 +48,28 @@ class _SplashscreenState extends State<Splashscreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fond avec formes colorées
+          // Fond avec dégradé de couleur
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xB2A885FF).withOpacity(0.4), // Violet
+                  Color(0xFFB2F99D).withOpacity(0.4), // Vert
+                  Color(0xFF80D1FF).withOpacity(0.4), // Bleu
+                ],
+                stops: [0.0, 0.5, 1.0],
+              ),
+            ),
+          ),
+
+          // Effet de flou léger pour adoucir le dégradé
           Positioned.fill(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: screenWidth * 0.65,
-                    top: screenHeight * 0.45,
-                    child: _buildColoredOval(screenWidth * 0.4,
-                        screenHeight * 0.4, Color(0xB2A885FF)),
-                  ),
-                  Positioned(
-                    left: screenWidth * 0.1,
-                    top: screenHeight * 0.6,
-                    child: _buildColoredOval(screenWidth * 0.8,
-                        screenHeight * 0.4, Color(0xFFB2F99D)),
-                  ),
-                  Positioned(
-                    left: -screenWidth * 0.2,
-                    top: screenHeight * 0.4,
-                    child: _buildColoredOval(screenWidth * 0.5,
-                        screenHeight * 0.6, Color(0xFF80D1FF)),
-                  ),
-                ],
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                color: Colors.transparent,
               ),
             ),
           ),
@@ -121,18 +118,6 @@ class _SplashscreenState extends State<Splashscreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // Fonction pour construire un ovale coloré avec une opacité
-  Widget _buildColoredOval(double width, double height, Color color) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: ShapeDecoration(
-        color: color.withOpacity(0.5),
-        shape: OvalBorder(),
       ),
     );
   }
