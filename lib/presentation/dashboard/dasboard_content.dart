@@ -1,90 +1,86 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class ContentsDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double screenWidth = MediaQuery.of(context).size.width;
-        bool isLargeScreen = screenWidth > 600; // Différenciation mobile/tablette
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isLargeScreen = screenWidth > 600; // Différenciation mobile/tablette
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            width: isLargeScreen ? 500 : double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, -4),
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildDependencyTestCard(isLargeScreen),
-                const SizedBox(height: 16),
-                _buildSectionTitle('Mes widgets'),
-                const SizedBox(height: 16),
-                _buildAddWidgetButton(),
-                const SizedBox(height: 16),
-                _buildOfferCard(),
-              ],
-            ),
-          ),
-        );
-      },
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, -4),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDependencyTestCard(isLargeScreen),
+          const SizedBox(height: 16),
+          _buildSectionTitle('Mes widgets'),
+          const SizedBox(height: 16),
+          _buildAddWidgetButton(screenWidth),
+          const SizedBox(height: 16),
+          _buildOfferCard(),
+        ],
+      ),
     );
   }
 
   Widget _buildDependencyTestCard(bool isLargeScreen) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Color(0xFFF5F8FC),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+      child: Stack(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Color(0xB2A885FF),
-                    shape: BoxShape.circle,
-                  ),
+          // 
+          // Contenu principal
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    Text(
+                      'Testez votre niveau de dépendance',
+                      style: TextStyle(
+                        color: Color(0xFF6C33FF),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Fixez-vous des objectifs et obtenez des données plus détaillées.',
+                      style: TextStyle(
+                        color: Color(0xFF222222),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Testez votre niveau de dépendance',
-                  style: TextStyle(
-                    color: Color(0xFF6C33FF),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fixez-vous des objectifs et obtenez des données plus détaillées.',
-                  style: TextStyle(
-                    color: Color(0xFF222222),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              if (isLargeScreen) const SizedBox(width: 16),
+              _buildScoreBadge(),
+            ],
           ),
-          if (isLargeScreen) const SizedBox(width: 16),
-          _buildScoreBadge(),
         ],
       ),
     );
@@ -108,7 +104,12 @@ class ContentsDashboard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          Icon(Icons.star, color: Colors.white, size: 16),
+          Container(
+            width: 16,
+            height: 16,
+            child: Image.asset(
+                'assets/images/hycoins.png'), // Remplacez par le chemin de votre image
+          ),
         ],
       ),
     );
@@ -131,33 +132,37 @@ class ContentsDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildAddWidgetButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: Color(0xFFF5F8FC),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFFDAE0F6)),
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.add_circle_outline, color: Color(0xFF044BD9), size: 24),
-          const SizedBox(height: 8),
-          Text(
-            'Ajouter un widget',
-            style: TextStyle(
-              color: Color(0xFF044BD9),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+  Widget _buildAddWidgetButton(double screenWidth) {
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Color(0xFFF5F8FC),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Color(0xFFDAE0F6)),
+        ),
+        child: Column(
+          children: [
+            Icon(Icons.add_circle_outline, color: Color(0xFF044BD9), size: 24),
+            const SizedBox(height: 8),
+            Text(
+              'Ajouter un widget',
+              style: TextStyle(
+                color: Color(0xFF044BD9),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildOfferCard() {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -179,9 +184,9 @@ class ContentsDashboard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildPriceOption('3,99€ /mois', Color(0xFF044BD9)),
+              _buildPriceOption('8,99€ /mois', Color(0xFF044BD9)),
               const SizedBox(width: 8),
-              _buildPriceOption('32,99€ /an', Color(0xFF84F266)),
+              _buildPriceOption('80,99€ /an', Color(0xFF84F266)),
             ],
           ),
           const SizedBox(height: 8),
@@ -197,12 +202,13 @@ class ContentsDashboard extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {},
             icon: Icon(Icons.arrow_forward, color: Colors.white),
-            label: Text('Découvrir'),
+            label: Text('Découvrir', style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF044BD9),
               shape: StadiumBorder(),
+             
             ),
-          ),
+            ),
         ],
       ),
     );

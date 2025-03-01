@@ -11,15 +11,9 @@ class CardsContext extends StatelessWidget {
         width: screenWidth > 600 ? 400 : double.infinity, // Largeur adaptative
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent, // Couleur de fond transparente
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 4),
-            ),
-          ],
+          boxShadow: [], // Retirer l'ombre
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,10 +59,10 @@ class CardsContext extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.smoking_rooms, color: Colors.white),
+                    icon: Icon(Icons.add, color: Colors.white), // Changer l'icône ici
                     label: Text(
                       'Consommation',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF044BD9),
