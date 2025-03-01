@@ -118,52 +118,61 @@ class _Step6State extends State<Step6> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle, color: Colors.green, size: 60),
-              const SizedBox(height: 16),
-              const Text(
-                'Compte créé avec succès !',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Votre compte ${emailController.text} a bien été enregistré.',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Dashboard()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF044BD9),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
+        final double screenHeight = MediaQuery.of(context).size.height;
+        final double screenWidth = MediaQuery.of(context).size.width;
+        final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: keyboardHeight),
+          child: Container(
+            height: screenHeight * 0.3, // Prend 30% de la hauteur de l'écran
+            width: screenWidth,
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.check_circle, color: Colors.green, size: 60),
+                const SizedBox(height: 16),
+                const Text(
+                  'Compte créé avec succès !',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  child: Text(
-                    'OK',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                const SizedBox(height: 10),
+                Text(
+                  'Votre compte ${emailController.text} a bien été enregistré.',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Dashboard()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF044BD9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

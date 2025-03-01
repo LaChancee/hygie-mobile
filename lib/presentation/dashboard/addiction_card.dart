@@ -16,8 +16,25 @@ class Cards extends StatelessWidget {
             vertical: screenHeight * 0.015,
           ),
           decoration: BoxDecoration(
-            color: Color(0xFFF5F8FC),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF4DD0E1), // Bleu cyan vif
+                Color(0xFF81C784), // Vert vif
+                Color(0xFFBA68C8), // Violet vif
+              ],
+              stops: [0.0, 0.5, 1.0],
+            ),
             borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 20,
+                spreadRadius: 2,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,18 +47,18 @@ class Cards extends StatelessWidget {
                       width: screenWidth * 0.15,
                       height: screenWidth * 0.15,
                       decoration: BoxDecoration(
-                        color: Color(0xB2A885FF),
+                        color: Colors.white.withOpacity(0.5),
                         shape: BoxShape.circle,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Opacity(
-                      opacity: 0.50,
+                      opacity: 0.7,
                       child: Container(
                         width: screenWidth * 0.2,
                         height: screenWidth * 0.2,
                         decoration: BoxDecoration(
-                          color: Color(0xFF80D1FF),
+                          color: Colors.white.withOpacity(0.5),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -50,18 +67,32 @@ class Cards extends StatelessWidget {
                     Text(
                       'Testez votre niveau de dépendance',
                       style: TextStyle(
-                        color: Color(0xFF6C33FF),
+                        color: Colors.white,
                         fontSize: screenWidth * 0.05,
                         fontWeight: FontWeight.w700,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 2,
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Fixez-vous des objectifs et obtenez des données plus détaillées.',
                       style: TextStyle(
-                        color: Color(0xFF222222),
+                        color: Colors.white,
                         fontSize: screenWidth * 0.035,
                         height: 1.4,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 2,
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -70,7 +101,7 @@ class Cards extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Color(0x7F044BD9),
+                  color: Colors.white.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(999),
                   boxShadow: [
                     BoxShadow(
@@ -90,7 +121,8 @@ class Cards extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 4),
-                    Icon(Icons.star, size: screenWidth * 0.04, color: Colors.white),
+                    Icon(Icons.star,
+                        size: screenWidth * 0.04, color: Colors.white),
                   ],
                 ),
               ),

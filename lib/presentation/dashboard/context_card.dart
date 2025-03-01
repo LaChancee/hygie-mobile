@@ -11,9 +11,9 @@ class CardsContext extends StatelessWidget {
         width: screenWidth > 600 ? 400 : double.infinity, // Largeur adaptative
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.transparent, // Couleur de fond transparente
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [], // Retirer l'ombre
+          border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class CardsContext extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.add, color: Colors.white), // Changer l'icône ici
+                    icon: Icon(Icons.add, color: Colors.white),
                     label: Text(
                       'Consommation',
                       style: TextStyle(fontSize: 16, color: Colors.white),

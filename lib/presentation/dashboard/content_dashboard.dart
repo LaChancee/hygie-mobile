@@ -100,65 +100,87 @@ class ContentsDashboard extends StatelessWidget {
 
   // ✅ Offre Hygie+
   Widget _buildHygiePlusOffer(double screenWidth) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(screenWidth * 0.04),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(width: 2, color: Color(0xFF044BD9)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Découvrez notre offre Hygie+ !',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF044BD9),
-              fontSize: screenWidth * 0.05,
-              fontWeight: FontWeight.w700,
+    return Stack(
+      children: [
+        // Conteneur avec dégradé (bordure)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF90CAF9), // Bleu clair
+                  Color(0xFF2196F3), // Bleu moyen
+                  Color(0xFF044BD9), // Bleu primaire
+                ],
+              ),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-          const SizedBox(height: 8),
-
-          // ✅ Prix
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        // Conteneur blanc intérieur (contenu)
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.all(2), // Crée l'effet de bordure
+          padding: EdgeInsets.all(screenWidth * 0.04),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14), // Légèrement plus petit
+          ),
+          child: Column(
             children: [
-              _buildPriceTag('3,99€ /mois', Color(0xFF044BD9), screenWidth),
-              const SizedBox(width: 8),
-              _buildPriceTag('32,99€ /an', Color(0xFF84F266), screenWidth),
+              Text(
+                'Découvrez notre offre Hygie+ !',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF044BD9),
+                  fontSize: screenWidth * 0.05,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // ✅ Prix
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildPriceTag('3,99€ /mois', Color(0xFF044BD9), screenWidth),
+                  const SizedBox(width: 8),
+                  _buildPriceTag('32,99€ /an', Color(0xFF84F266), screenWidth),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                'Accédez à des outils supplémentaires, des programmes de sevrage et obtenez des récompenses supplémentaires pour chaque effort !',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: screenWidth * 0.035,
+                  height: 1.4,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.arrow_forward, size: screenWidth * 0.04),
+                label: Text("Découvrir"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF044BD9),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
             ],
           ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            'Accédez à des outils supplémentaires, des programmes de sevrage et obtenez des récompenses supplémentaires pour chaque effort !',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF222222),
-              fontSize: screenWidth * 0.035,
-              height: 1.4,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          ElevatedButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_forward, size: screenWidth * 0.04),
-            label: Text("Découvrir"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF044BD9),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

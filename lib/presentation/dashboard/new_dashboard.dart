@@ -11,36 +11,49 @@ class Dashboard extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF5F8FC),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ✅ TopBar (Barre supérieure)
-            TopBar(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFE0F7FA), // Bleu clair
+              Color(0xFFE8F5E9), // Vert clair
+              Color(0xFFF3E5F5), // Violet clair
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // ✅ TopBar (Barre supérieure)
+              TopBar(),
 
-            // ✅ ESPACE PRINCIPAL : Dashboard Content
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: screenHeight * 0.02),
+              // ✅ ESPACE PRINCIPAL : Dashboard Content
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: screenHeight * 0.02),
 
-                    // ✅ CardsContext (Carte avec les jours sans fumer)
-                    CardsContext(),
+                      // ✅ CardsContext (Carte avec les jours sans fumer)
+                      CardsContext(),
 
-                    SizedBox(height: screenHeight * 0.03),
+                      SizedBox(height: screenHeight * 0.03),
 
-                    // ✅ ContentsDashboard (Widgets du Dashboard)
-                    ContentsDashboard(),
-                  ],
+                      // ✅ ContentsDashboard (Widgets du Dashboard)
+                      ContentsDashboard(),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            // ✅ TabBar (Barre de navigation en bas)
-            ResponsiveTabBar(),
-          ],
+              // ✅ TabBar (Barre de navigation en bas)
+              ResponsiveTabBar(),
+            ],
+          ),
         ),
       ),
     );
