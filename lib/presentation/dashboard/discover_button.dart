@@ -36,7 +36,6 @@ class DiscoverButton extends StatelessWidget {
         ],
       ),
     );
-    throw UnimplementedError();
   }
 }
 

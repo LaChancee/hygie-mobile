@@ -20,7 +20,7 @@ class ButtonWithoutIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Définir les styles de taille selon ButtonSize
-    double width, height, paddingHorizontal, paddingVertical, fontSize;
+    double paddingHorizontal, paddingVertical, fontSize;
 
     switch (size) {
       case ButtonSize.small:

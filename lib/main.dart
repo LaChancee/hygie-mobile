@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hygie_mobile/presentation/splash_screen.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hygie_mobile/presentation/authentification/auth_screen.dart';
@@ -13,8 +16,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized(); // Pour assurer l'initialisation correcte
-  await initializeDateFormatting('fr', null); // Charge les données pour le français
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Pour assurer l'initialisation correcte
+  await initializeDateFormatting(
+      'fr', null); // Charge les données pour le français
   runApp(const MyApp());
 }
 
@@ -25,23 +30,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hygie' ,
+      title: 'Hygie',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         primaryColor: AppColors.primaryColor,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         scaffoldBackgroundColor: AppColors.backgroundColor,
@@ -60,11 +50,9 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return HomePage(); // Redirection vers HomePage si connecté
           }
-          return AuthScreen(); // Redirection vers l'écran de connexion sinon
+          return Splashscreen(); // Redirection vers l'écran de connexion sinon
         },
       ),
-
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
