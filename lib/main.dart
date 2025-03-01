@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           }
           return AuthScreen(); // Redirection vers l'écran de connexion sinon
         },
-      ),
+      )
     );
   }
 }
