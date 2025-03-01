@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hygie_mobile/presentation/authentification/auth_screen.dart';
+import 'package:hygie_mobile/presentation/profil/widgets/profile_header.dart';
+import 'package:hygie_mobile/presentation/profil/widgets/profile_badges.dart';
+// import 'package:hygie_mobile/presentation/profil/widgets/profile_dependency.dart';
+// import 'package:hygie_mobile/presentation/profil/widgets/profile_parrainage.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -9,52 +13,38 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: const Text(
+          'Mon Profil',
+          style: TextStyle(
+            color: Color(0xFF222222),
+            fontFamily: 'DM Sans',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, color: Colors.blue),
+            onPressed: () {
+              // Action à effectuer lorsque l'icône de paramètres est cliquée
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black,
-                        border: Border.all(
-                          color: Colors.white, // Bordure blanche
-                          width: 2,
-                        ),
-                      ),
-                      padding: EdgeInsets.all(4), // Espacement autour de l'icône
-                      child: Icon(
-                        Icons.camera_alt,
-                        color: Colors.white, // Icône en blanc pour contraste
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            ProfileHeader(user: user),
             const SizedBox(height: 20),
-            Text(
-              'Email : ${user?.email ?? "Non renseigné"}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            // Ajoutez ici d'autres informations comme le nom ou d'autres champs du profil
-            const SizedBox(height: 40),
+            ProfileBadges(),
+            const SizedBox(height: 20),
+            // ContentParrainage(), // Ajouter le widget ContentParrainage ici
+            // const SizedBox(height: 20),
+            // ContentDependance(),
+            // const SizedBox(height: 40),
             Center(
               child: ElevatedButton(
                 onPressed: () {
