@@ -41,6 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+<<<<<<< HEAD
 /android
 
 pubspec.lock
@@ -105,3 +106,7 @@ android/app/build.gradle
 macos/Flutter/GeneratedPluginRegistrant.swift
 windows/flutter/generated_plugin_registrant.cc
 windows/flutter/generated_plugins.cmake
+=======
+
+pubspec.lock
+>>>>>>> 5cce0433b664369fdf111b9a57e9e27564c6c7d6

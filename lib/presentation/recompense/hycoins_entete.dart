@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HycoinsHeader extends StatelessWidget {
-  const HycoinsHeader({super.key});
+  const HycoinsHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
