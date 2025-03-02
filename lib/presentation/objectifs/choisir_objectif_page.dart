@@ -17,7 +17,7 @@ class ChoisirObjectifPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Header(title: ""), // Utilisation du header réutilisable
+            Header(title: ""),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -73,7 +73,7 @@ class ChoisirObjectifPage extends StatelessWidget {
                   SizedBox(height: 16),
                   _buildGoalOption(
                     context,
-                    'Je veux arrêter de consommer dès aujourd’hui',
+                    "Je veux arrêter de consommer dès aujourd'hui",
                     'Objectif santé',
                     Color(0xFFDFE6EE),
                     'santé',
@@ -98,7 +98,9 @@ class ChoisirObjectifPage extends StatelessWidget {
   }
 
   // Widget pour afficher chaque objectif dans la liste
-  Widget _buildGoalOption(BuildContext context, String title, String subtitle, Color backgroundColor, String type, [String? points]) {
+  Widget _buildGoalOption(BuildContext context, String title, String subtitle,
+      Color backgroundColor, String type,
+      [String? points]) {
     return GestureDetector(
       onTap: () {
         _showModalBottomSheet(context, title);
@@ -131,7 +133,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              child: _getIconForGoalType(type), // Utilisation de l'icône appropriée
+              child: _getIconForGoalType(
+                  type), // Utilisation de l'icône appropriée
             ),
             SizedBox(width: 16),
             Expanded(
@@ -198,13 +201,16 @@ class ChoisirObjectifPage extends StatelessWidget {
   Widget _getIconForGoalType(String type) {
     switch (type) {
       case 'santé':
-        return const Icon(Icons.health_and_safety, color: Color.fromRGBO(4, 75, 217, 1));
+        return const Icon(Icons.health_and_safety,
+            color: Color.fromRGBO(4, 75, 217, 1));
       case 'épargne':
         return const Icon(Icons.savings, color: Color.fromRGBO(4, 75, 217, 1));
       case 'alcool':
-        return const Icon(Icons.local_bar, color: Color.fromRGBO(4, 75, 217, 1));
+        return const Icon(Icons.local_bar,
+            color: Color.fromRGBO(4, 75, 217, 1));
       case 'tabac':
-        return const Icon(Icons.smoking_rooms, color: Color.fromRGBO(4, 75, 217, 1));
+        return const Icon(Icons.smoking_rooms,
+            color: Color.fromRGBO(4, 75, 217, 1));
       default:
         return const Icon(Icons.help_outline, color: Colors.grey);
     }
@@ -232,7 +238,8 @@ class ModaleConfirmationAchat extends StatefulWidget {
   ModaleConfirmationAchat({required this.selectedGoal});
 
   @override
-  _ModaleConfirmationAchatState createState() => _ModaleConfirmationAchatState();
+  _ModaleConfirmationAchatState createState() =>
+      _ModaleConfirmationAchatState();
 }
 
 class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
@@ -282,9 +289,15 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                     padding: const EdgeInsets.all(16),
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
-                      color: _selectedOption == 'Tabac' ? Color(0xFFDDD4FF) : Color(0xFFF5F8FC),
+                      color: _selectedOption == 'Tabac'
+                          ? Color(0xFFDDD4FF)
+                          : Color(0xFFF5F8FC),
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 1, color: _selectedOption == 'Tabac' ? Color(0xFF8352FF) : Colors.transparent),
+                        side: BorderSide(
+                            width: 1,
+                            color: _selectedOption == 'Tabac'
+                                ? Color(0xFF8352FF)
+                                : Colors.transparent),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -299,7 +312,9 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                             color: Color(0xFF222222),
                             fontSize: 14,
                             fontFamily: 'DM Sans',
-                            fontWeight: _selectedOption == 'Tabac' ? FontWeight.w600 : FontWeight.w500,
+                            fontWeight: _selectedOption == 'Tabac'
+                                ? FontWeight.w600
+                                : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -319,9 +334,15 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                     padding: const EdgeInsets.all(16),
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
-                      color: _selectedOption == 'Alcool' ? Color(0xFFDDD4FF) : Color(0xFFF5F8FC),
+                      color: _selectedOption == 'Alcool'
+                          ? Color(0xFFDDD4FF)
+                          : Color(0xFFF5F8FC),
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 1, color: _selectedOption == 'Alcool' ? Color(0xFF8352FF) : Colors.transparent),
+                        side: BorderSide(
+                            width: 1,
+                            color: _selectedOption == 'Alcool'
+                                ? Color(0xFF8352FF)
+                                : Colors.transparent),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -336,7 +357,9 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                             color: Color(0xFF222222),
                             fontSize: 14,
                             fontFamily: 'DM Sans',
-                            fontWeight: _selectedOption == 'Alcool' ? FontWeight.w600 : FontWeight.w500,
+                            fontWeight: _selectedOption == 'Alcool'
+                                ? FontWeight.w600
+                                : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -355,7 +378,8 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 16),
                     decoration: ShapeDecoration(
                       color: Color(0xFF044BD9),
                       shape: RoundedRectangleBorder(
@@ -428,7 +452,8 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 16),
                     decoration: ShapeDecoration(
                       color: Color(0xFF044BD9),
                       shape: RoundedRectangleBorder(
@@ -463,7 +488,8 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
 
   Future<void> _saveGoalToFirebase() async {
     final firestore = FirebaseFirestore.instance;
-    final userId = FirebaseAuth.instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
+    final userId = FirebaseAuth
+        .instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
     if (userId != null) {
       final goalData = {
         'userId': userId,

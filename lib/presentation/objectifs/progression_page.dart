@@ -8,7 +8,8 @@ class ProgressionPage extends StatefulWidget {
   final String title;
   final String objectifId;
 
-  const ProgressionPage({required this.type, required this.title, required this.objectifId});
+  const ProgressionPage(
+      {required this.type, required this.title, required this.objectifId});
 
   @override
   _ProgressionPageState createState() => _ProgressionPageState();
@@ -84,7 +85,8 @@ class _ProgressionPageState extends State<ProgressionPage> {
       'progression': 0.0,
     },
     {
-      'titre': 'L\'espérance de vie est redevenue identique à celle d\'une personne qui n\'a jamais fumé.',
+      'titre':
+          'L\'espérance de vie est redevenue identique à celle d\'une personne qui n\'a jamais fumé.',
       'description': 'Palier atteint entre 10 et 15 ans.',
       'points': 100,
       'duration': Duration(days: 5475),
@@ -99,7 +101,10 @@ class _ProgressionPageState extends State<ProgressionPage> {
   }
 
   Future<void> _fetchStartDate() async {
-    final doc = await FirebaseFirestore.instance.collection('objectif').doc(widget.objectifId).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('objectif')
+        .doc(widget.objectifId)
+        .get();
     if (doc.exists) {
       setState(() {
         startDate = DateTime.parse(doc['createdAt']);
@@ -137,7 +142,7 @@ class _ProgressionPageState extends State<ProgressionPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(title: ""), // Utilisation du header réutilisable
+                  Header(title: ""),
                   SizedBox(height: 20),
                   Stack(
                     children: [
@@ -148,19 +153,9 @@ class _ProgressionPageState extends State<ProgressionPage> {
                           child: IconButton(
                             icon: Icon(Icons.arrow_back),
                             onPressed: () {
-                              Navigator.pop(context); // Retour à la page précédente
+                              Navigator.pop(
+                                  context); // Retour à la page précédente
                             },
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Mes objectifs',
-                          style: TextStyle(
-                            color: Color(0xFF222222),
-                            fontSize: 16,
-                            fontFamily: 'DM Sans',
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -203,12 +198,17 @@ class _ProgressionPageState extends State<ProgressionPage> {
                                         width: double.infinity,
                                         child: ListObjectif(
                                           titre: sousObjectif['titre'],
-                                          description: sousObjectif['description'],
+                                          description:
+                                              sousObjectif['description'],
                                           points: sousObjectif['points'],
-                                          progression: sousObjectif['progression'].toDouble(),
+                                          progression:
+                                              sousObjectif['progression']
+                                                  .toDouble(),
                                         ),
                                       ),
-                                      SizedBox(height: 16), // Espace entre les sous-objectifs
+                                      SizedBox(
+                                          height:
+                                              16), // Espace entre les sous-objectifs
                                     ],
                                   );
                                 }).toList(),
@@ -326,7 +326,8 @@ class _ListObjectifState extends State<ListObjectif> {
                 const SizedBox(width: 16),
                 if (widget.points > 0)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: ShapeDecoration(
                       color: Color(0xFFDAE0F6),
                       shape: RoundedRectangleBorder(
@@ -367,7 +368,9 @@ class _ListObjectifState extends State<ListObjectif> {
                     left: 0,
                     top: 0,
                     child: Container(
-                      width: MediaQuery.of(context).size.width, // Contraindre la largeur
+                      width: MediaQuery.of(context)
+                          .size
+                          .width, // Contraindre la largeur
                       height: 5,
                       decoration: ShapeDecoration(
                         color: Color(0xFFD9D9D9),
@@ -381,7 +384,8 @@ class _ListObjectifState extends State<ListObjectif> {
                     left: 0,
                     top: 0,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * (widget.progression), // Contraindre la largeur
+                      width: MediaQuery.of(context).size.width *
+                          (widget.progression), // Contraindre la largeur
                       height: 5,
                       decoration: ShapeDecoration(
                         color: Color(0xFF8352FF),

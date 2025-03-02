@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hygie_mobile/presentation/dashboard/top_bar.dart';
 import 'progression_page.dart';
 import 'choisir_objectif_page.dart';
 
@@ -17,32 +18,37 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Header(title: ""),
+          SafeArea(
+            child: TopBar(
+              showCagnotte: false,
+            ),
+          ),
           SizedBox(height: 16), // Espacement entre le header et les objectifs
-          MesObjectifs(),
-          SizedBox(height: 32), // Espacement avant la liste des objectifs
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('objectif')
-                  .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                  .where('userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser?.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  return Center(child: Text('Erreur lors du chargement des objectifs'));
+                  return Center(
+                      child: Text('Erreur lors du chargement des objectifs'));
                 }
 
                 final userObjectives = snapshot.data?.docs.map((doc) {
-                  final objective = doc.data() as Map<String, dynamic>;
-                  return {
-                    'id': doc.id, // Ajoutez l'ID du document ici
-                    'description': objective['description'],
-                    'type': objective['type'],
-                  };
-                }).toList() ?? [];
+                      final objective = doc.data() as Map<String, dynamic>;
+                      return {
+                        'id': doc.id, // Ajoutez l'ID du document ici
+                        'description': objective['description'],
+                        'type': objective['type'],
+                      };
+                    }).toList() ??
+                    [];
 
                 return Column(
                   children: [
@@ -65,13 +71,16 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                                         builder: (context) => ProgressionPage(
                                           type: objective['type'],
                                           title: objective['description'],
-                                          objectifId: objective['id'], // Passez l'ID ici
+                                          objectifId: objective[
+                                              'id'], // Passez l'ID ici
                                         ),
                                       ),
                                     );
                                   },
                                 ),
-                                SizedBox(height: 20), // Espacement entre les rubriques
+                                SizedBox(
+                                    height:
+                                        20), // Espacement entre les rubriques
                               ],
                             );
                           },
@@ -81,7 +90,9 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                       Column(
                         children: [
                           Center(child: Text('Aucun objectif trouvé.')),
-                          SizedBox(height: 40), // Espacement entre le message et le bouton
+                          SizedBox(
+                              height:
+                                  40), // Espacement entre le message et le bouton
                         ],
                       ),
                   ],
@@ -188,27 +199,6 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
   }
 }
 
-class MesObjectifs extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        children: [
-          Text(
-            'Mes objectifs',
-            style: TextStyle(
-              color: Color(0xFF222222),
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -223,7 +213,8 @@ class AddButton extends StatelessWidget {
         );
       },
       child: Container(
-        width: MediaQuery.of(context).size.width - 32, // Prendre toute la largeur de l'écran avec une marge de 16 de chaque côté
+        width: MediaQuery.of(context).size.width -
+            32, // Prendre toute la largeur de l'écran avec une marge de 16 de chaque côté
         height: 72,
         padding: const EdgeInsets.all(16),
         clipBehavior: Clip.antiAlias,
