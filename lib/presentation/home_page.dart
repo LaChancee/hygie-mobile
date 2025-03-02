@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hygie_mobile/presentation/dashboard/dashboard_page.dart';
+import 'package:hygie_mobile/presentation/dashboard/new_dashboard.dart';
 import 'package:hygie_mobile/presentation/journal/journal_page.dart';
 import 'package:hygie_mobile/presentation/objectifs/objectif_page.dart';
 import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
@@ -41,7 +41,9 @@ class _HomePageState extends State<HomePage> {
               'assets/icons/icon_dashboard.svg', // Chemin vers votre fichier SVG
               width: 24,
               height: 24,
-              color: _selectedIndex == 0 ? const Color(0xFF044BD9) : const Color(0xFF707070),
+              color: _selectedIndex == 0
+                  ? const Color(0xFF044BD9)
+                  : const Color(0xFF707070),
             ),
             label: 'Dashboard',
           ),
@@ -50,7 +52,9 @@ class _HomePageState extends State<HomePage> {
               'assets/icons/icon_journal.svg', // Chemin vers votre fichier SVG
               width: 24,
               height: 24,
-              color: _selectedIndex == 1 ? const Color(0xFF044BD9) : const Color(0xFF707070),
+              color: _selectedIndex == 1
+                  ? const Color(0xFF044BD9)
+                  : const Color(0xFF707070),
             ),
             label: 'Journal',
           ),
@@ -59,7 +63,9 @@ class _HomePageState extends State<HomePage> {
               'assets/icons/icon_recompenses.svg', // Chemin vers votre fichier SVG
               width: 24,
               height: 24,
-              color: _selectedIndex == 2 ? const Color(0xFF044BD9) : const Color(0xFF707070),
+              color: _selectedIndex == 2
+                  ? const Color(0xFF044BD9)
+                  : const Color(0xFF707070),
             ),
             label: 'Récompenses',
           ),
@@ -68,7 +74,9 @@ class _HomePageState extends State<HomePage> {
               'assets/icons/icon_objectif.svg', // Chemin vers votre fichier SVG
               width: 24,
               height: 24,
-              color: _selectedIndex == 3 ? const Color(0xFF044BD9) : const Color(0xFF707070),
+              color: _selectedIndex == 3
+                  ? const Color(0xFF044BD9)
+                  : const Color(0xFF707070),
             ),
             label: 'Objectifs',
           ),

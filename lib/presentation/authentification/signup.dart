@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/dashboard/new_dashboard.dart';
+import 'package:hygie_mobile/presentation/home_page.dart';
 
 class Step6 extends StatefulWidget {
   @override
@@ -154,7 +155,8 @@ class _Step6State extends State<Step6> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewDashboard()),
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      
                     );
                   },
                   style: ElevatedButton.styleFrom(
