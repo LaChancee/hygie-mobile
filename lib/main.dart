@@ -3,8 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hygie_mobile/presentation/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hygie_mobile/presentation/authentification/auth_screen.dart';
 import 'package:hygie_mobile/presentation/home_page.dart';
 
@@ -16,8 +14,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Pour assurer l'initialisation correcte
   await initializeDateFormatting(
       'fr', null); // Charge les données pour le français
   runApp(const MyApp());

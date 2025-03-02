@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/header.dart';
-import 'progression_page';
-import 'choisir_objectif_page.dart';
+import 'package:hygie_mobile/presentation/objectifs/progression_page.dart';
+import 'package:hygie_mobile/presentation/objectifs/choisir_objectif_page.dart';
+import 'package:hygie_mobile/services/app_router.dart';
 
 class ObjectifsPage extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -23,50 +24,90 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
             Header(title: ""),
             SizedBox(height: 20),
 
-            // Rubrique Objectifs de santé
-            _buildGoalSection(
-              title: 'Objectif de santé',
-              icon: Icons.local_fire_department,
-              expanded: showHealthGoals,
-              onTap: () {
-                setState(() {
-                  showHealthGoals = !showHealthGoals;
-                });
-              },
-              subOptions: showHealthGoals
-                  ? [
-                      _buildSubOption(context, 'Tabac', 'Objectifs validés 2/46', 'Tabac', Colors.blue[50]!),
-                      SizedBox(height: 10), // Espace entre Tabac et Alcool
-                      _buildSubOption(context, 'Alcool', 'Objectifs validés 1/10', 'Alcool', Colors.blue[50]!),
-                      SizedBox(height: 20), // Espacement ajouté en dessous de la carte Alcool
-                    ]
-                  : [],
-            ),
-            SizedBox(height: 20),
+            // Contenu principal dans un SingleChildScrollView
+            Expanded(
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Rubrique Objectifs de santé
+                    _buildGoalSection(
+                      title: 'Objectif de santé',
+                      icon: Icons.local_fire_department,
+                      expanded: showHealthGoals,
+                      onTap: () {
+                        setState(() {
+                          showHealthGoals = !showHealthGoals;
+                        });
+                      },
+                      subOptions: showHealthGoals
+                          ? [
+                              _buildSubOption(
+                                  context,
+                                  'Tabac',
+                                  'Objectifs validés 2/46',
+                                  'Tabac',
+                                  Colors.blue[50]!),
+                              SizedBox(
+                                  height: 10), // Espace entre Tabac et Alcool
+                              _buildSubOption(
+                                  context,
+                                  'Alcool',
+                                  'Objectifs validés 1/10',
+                                  'Alcool',
+                                  Colors.blue[50]!),
+                              SizedBox(
+                                  height:
+                                      20), // Espacement ajouté en dessous de la carte Alcool
+                            ]
+                          : [],
+                    ),
+                    SizedBox(height: 20),
 
-            // Rubrique Objectifs d'épargne avec les mêmes espacements
-            _buildGoalSection(
-              title: 'Objectif d\'épargne',
-              icon: Icons.savings,
-              expanded: showSavingsGoals,
-              onTap: () {
-                setState(() {
-                  showSavingsGoals = !showSavingsGoals;
-                });
-              },
-              subOptions: showSavingsGoals
-                  ? [
-                      _buildSubOption(context, 'Tabac', 'Objectifs validés 2/46', 'Tabac', Colors.blue[50]!),
-                      SizedBox(height: 10), // Espace entre Tabac et Alcool
-                      _buildSubOption(context, 'Alcool', 'Objectifs validés 1/10', 'Alcool', Colors.blue[50]!),
-                      SizedBox(height: 20), // Espacement ajouté en dessous de la carte Alcool pour épargne
-                    ]
-                  : [],
-            ),
-            SizedBox(height: 20),
+                    // Rubrique Objectifs d'épargne avec les mêmes espacements
+                    _buildGoalSection(
+                      title: 'Objectif d\'épargne',
+                      icon: Icons.savings,
+                      expanded: showSavingsGoals,
+                      onTap: () {
+                        setState(() {
+                          showSavingsGoals = !showSavingsGoals;
+                        });
+                      },
+                      subOptions: showSavingsGoals
+                          ? [
+                              _buildSubOption(
+                                  context,
+                                  'Tabac',
+                                  'Objectifs validés 2/46',
+                                  'Tabac',
+                                  Colors.blue[50]!),
+                              SizedBox(
+                                  height: 10), // Espace entre Tabac et Alcool
+                              _buildSubOption(
+                                  context,
+                                  'Alcool',
+                                  'Objectifs validés 1/10',
+                                  'Alcool',
+                                  Colors.blue[50]!),
+                              SizedBox(
+                                  height:
+                                      20), // Espacement ajouté en dessous de la carte Alcool pour épargne
+                            ]
+                          : [],
+                    ),
+                    SizedBox(height: 20),
 
-            // Rubrique Se fixer un objectif
-            _buildSimpleTile('Se fixer un objectif', Icons.add),
+                    // Rubrique Se fixer un objectif
+                    _buildSimpleTile('Se fixer un objectif', Icons.add),
+
+                    // Espace en bas pour éviter que le contenu soit caché par la TabBar
+                    SizedBox(height: 80),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -106,7 +147,8 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                   title,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                trailing: Icon(expanded ? Icons.expand_less : Icons.expand_more),
+                trailing:
+                    Icon(expanded ? Icons.expand_less : Icons.expand_more),
                 onTap: onTap,
               ),
               if (expanded) ...subOptions,
@@ -118,7 +160,8 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
   }
 
   // Widget pour les sous-options (Tabac, Alcool) sans ombrage
-  Widget _buildSubOption(BuildContext context, String label, String subtitle, String type, Color backgroundColor) {
+  Widget _buildSubOption(BuildContext context, String label, String subtitle,
+      String type, Color backgroundColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
@@ -129,10 +172,8 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
           title: Text(label),
           subtitle: Text(subtitle),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProgressionPage(type: type)),
-            );
+            // Utiliser AppRouter pour naviguer tout en gardant la barre de navigation
+            AppRouter().navigateTo(context, ProgressionPage(type: type));
           },
         ),
       ),
@@ -164,11 +205,10 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
               title,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-                        onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChoisirObjectifPage(category: 'Choisir un objectif')),
-              );
+            onTap: () {
+              // Utiliser AppRouter pour naviguer tout en gardant la barre de navigation
+              AppRouter().navigateTo(context,
+                  ChoisirObjectifPage(category: 'Choisir un objectif'));
             },
           ),
         ),

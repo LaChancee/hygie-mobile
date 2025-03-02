@@ -154,7 +154,7 @@ class _Step6State extends State<Step6> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Dashboard()),
+                      MaterialPageRoute(builder: (context) => NewDashboard()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

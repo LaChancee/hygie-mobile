@@ -10,7 +10,8 @@ class JournalPage extends StatefulWidget {
   _JournalPageState createState() => _JournalPageState();
 }
 
-class _JournalPageState extends State<JournalPage> with SingleTickerProviderStateMixin {
+class _JournalPageState extends State<JournalPage>
+    with SingleTickerProviderStateMixin {
   DateTime selectedDate = DateTime.now();
   late TabController _tabController;
 
@@ -28,13 +29,15 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
   Future<void> _loadConsumptions() async {
     try {
       // Début et fin du jour sélectionné
-      final startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      final startOfDay =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
 
       // Récupérer les données depuis Firestore
       final snapshot = await FirebaseFirestore.instance
           .collection('consommations')
-          .where('dateConsommation', isGreaterThanOrEqualTo: startOfDay.toIso8601String())
+          .where('dateConsommation',
+              isGreaterThanOrEqualTo: startOfDay.toIso8601String())
           .where('dateConsommation', isLessThan: endOfDay.toIso8601String())
           .get();
 
@@ -42,8 +45,10 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
       final data = snapshot.docs.map((doc) {
         final consumption = doc.data();
         return {
-          'time': DateFormat('HH:mm').format(DateTime.parse(consumption['dateConsommation'])),
-          'description': '${consumption['quantité']} ${consumption['type']} consommées',
+          'time': DateFormat('HH:mm')
+              .format(DateTime.parse(consumption['dateConsommation'])),
+          'description':
+              '${consumption['quantité']} ${consumption['type']} consommées',
         };
       }).toList();
 
@@ -51,7 +56,7 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
         dailyConsumptions = data; // Met à jour les consommations du jour
       });
     } catch (e) {
-      print('Erreur lors du chargement des consommations : $e');
+      print('Erreur lors du chargement des consommations : $e');
     }
   }
 
@@ -66,80 +71,85 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Header(title: ""),
-          const SizedBox(height: 20),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Header(title: ""),
+            const SizedBox(height: 20),
 
-          // Onglets "Activités" et "Programme"
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black54,
-              indicator: BoxDecoration(
-                color: const Color.fromRGBO(4, 75, 217, 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              tabs: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: const Tab(text: "Activités"),
+            // Onglets "Activités" et "Programme"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.black54,
+                indicator: BoxDecoration(
+                  color: const Color.fromRGBO(4, 75, 217, 1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: const Tab(text: "Programme"),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Affichage de la date choisie
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.chevron_left, color: Colors.blue),
-                  onPressed: () => _incrementDate(-1),
-                ),
-                Text(
-                  DateFormat('EEEE d MMMM', 'fr').format(selectedDate),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(4, 75, 217, 1),
+                tabs: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Activités"),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right, color: Colors.blue),
-                  onPressed: () => _incrementDate(1),
-                ),
-              ],
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Programme"),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Contenu des onglets
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Vue "Activités"
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: _buildActivityList(),
-                ),
-                // Vue "Programme"
-                const Center(child: Text('Programme - En construction')),
-              ],
+            // Affichage de la date choisie
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left, color: Colors.blue),
+                    onPressed: () => _incrementDate(-1),
+                  ),
+                  Text(
+                    DateFormat('EEEE d MMMM', 'fr').format(selectedDate),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(4, 75, 217, 1),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, color: Colors.blue),
+                    onPressed: () => _incrementDate(1),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+
+            // Contenu des onglets
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Vue "Activités"
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _buildActivityList(),
+                  ),
+                  // Vue "Programme"
+                  const Center(child: Text('Programme - En construction')),
+                ],
+              ),
+            ),
+
+            // Espace en bas pour éviter que le contenu soit caché par la TabBar
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -163,7 +173,8 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
               CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.grey[200],
-                child: const Icon(Icons.local_fire_department, color: Colors.grey),
+                child:
+                    const Icon(Icons.local_fire_department, color: Colors.grey),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -172,7 +183,8 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
                   children: [
                     Text(
                       activity['description']!,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
