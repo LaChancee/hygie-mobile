@@ -37,6 +37,7 @@ dependencies:
   firebase_storage: ^12.4.1
   image_picker: ^0.8.5+2
   flutter_svg: ^1.0.3 
+  font_awesome_flutter: ^10.1.0
 
 
 
@@ -82,6 +83,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -32,7 +32,7 @@ class ProfileHeader extends StatelessWidget {
                       image: DecorationImage(
                         image: user?.photoURL != null
                             ? NetworkImage(user!.photoURL!)
-                            : AssetImage('assets/images/logo_user.jpg') as ImageProvider,
+                            : AssetImage('assets/images/logo_user.png') as ImageProvider,
                         fit: BoxFit.fill,
                       ),
                       shape: OvalBorder(

@@ -43,7 +43,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/user.jpg'), // Image du profil
+                backgroundImage: AssetImage('assets/images/logo_user.png'), // Image du profil
               ),
             ),
           ),
