@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomNavbar extends StatefulWidget {
   const CustomNavbar({Key? key}) : super(key: key);
@@ -13,9 +14,9 @@ class _CustomNavbarState extends State<CustomNavbar> {
   // Liste des éléments de la navbar
   final List<_NavbarItem> _navbarItems = [
     _NavbarItem(icon: Icons.dashboard, label: 'Dashboard'),
-    _NavbarItem(icon: Icons.book, label: 'Journal'),
-    _NavbarItem(icon: Icons.star, label: 'Récompenses'),
-    _NavbarItem(icon: Icons.flag, label: 'Objectifs'),
+    _NavbarItem(icon: Icons.note, label: 'Journal'), // Icône de bloc-notes
+    _NavbarItem(icon: Icons.card_giftcard, label: 'Récompenses'), // Icône de cadeau
+    _NavbarItem(icon: FontAwesomeIcons.bullseye, label: 'Objectifs'), // Icône de cible
   ];
 
   void _onItemTapped(int index) {
@@ -43,7 +44,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(
           _navbarItems.length,
-              (index) {
+          (index) {
             final isSelected = _selectedIndex == index;
             return GestureDetector(
               onTap: () => _onItemTapped(index),

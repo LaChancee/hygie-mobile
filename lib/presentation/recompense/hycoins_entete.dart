@@ -1,75 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HycoinsHeader extends StatelessWidget {
   const HycoinsHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return Center(
       child: Container(
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+        width: MediaQuery.of(context).size.width * 0.95,
+        height: 90,
+        padding: const EdgeInsets.all(16),
+        decoration: ShapeDecoration(
           gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF005BEA), // Couleur de dégradé bleu foncé
-              Color(0xFF00C6FB), // Couleur de dégradé bleu clair
-            ],
+            begin: Alignment(-0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [Color(0xFF1991FF), Color(0xFF044BD9)],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Centrer verticalement
-          crossAxisAlignment: CrossAxisAlignment.center, // Centrer horizontalement
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Mes hycoins',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Mes hycoins',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'DM Sans',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      '20 145',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 32,
+                                        fontFamily: 'DM Sans',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      width: 24,
+                                      height: 24,
+                                      child: SvgPicture.asset(
+                                        'assets/images/Hygie.svg',
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Centrer horizontalement
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: const [
-                Text(
-                  '2145,63',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'hc',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Action du bouton Historique
-              },
-              icon: const Icon(Icons.history, color: Colors.white),
-              label: const Text(
-                'Historique',
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.2), // Couleur du bouton
+            Container(
+              width: 145,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: ShapeDecoration(
+                color: const Color(0xFF044BD9),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(999),
                 ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'historique',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 24,
+                    height: 24,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(),
+                    child: const Icon(Icons.history, color: Colors.white),
+                  ),
+                ],
               ),
             ),
           ],

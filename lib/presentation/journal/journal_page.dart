@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hygie_mobile/presentation/journal/add_button.dart';
+import 'package:hygie_mobile/presentation/journal/modale_add_activity.dart';
 
 class JournalPage extends StatefulWidget {
-  const JournalPage({Key? key}) : super(key: key);
+  final bool openAddActivityModal;
+
+  const JournalPage({Key? key, this.openAddActivityModal = false}) : super(key: key);
 
   @override
   _JournalPageState createState() => _JournalPageState();
@@ -15,49 +20,53 @@ class _JournalPageState extends State<JournalPage>
   DateTime selectedDate = DateTime.now();
   late TabController _tabController;
 
-  // Liste des consommations du jour
-  List<Map<String, dynamic>> dailyConsumptions = [];
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _loadConsumptions(); // Charger les données au démarrage
+    if (widget.openAddActivityModal) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAddActivityModal();
+      });
+    }
   }
 
-  /// Charge les consommations du jour sélectionné
-  Future<void> _loadConsumptions() async {
-    try {
-      // Début et fin du jour sélectionné
-      final startOfDay =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-      final endOfDay = startOfDay.add(const Duration(days: 1));
+  void _showAddActivityModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return ModaleAddActivity();
+      },
+    );
+  }
 
-      // Récupérer les données depuis Firestore
-      final snapshot = await FirebaseFirestore.instance
-          .collection('consommations')
-          .where('dateConsommation',
-              isGreaterThanOrEqualTo: startOfDay.toIso8601String())
-          .where('dateConsommation', isLessThan: endOfDay.toIso8601String())
-          .get();
-
-      // Mapper les données pour les afficher
-      final data = snapshot.docs.map((doc) {
-        final consumption = doc.data();
-        return {
-          'time': DateFormat('HH:mm')
-              .format(DateTime.parse(consumption['dateConsommation'])),
-          'description':
-              '${consumption['quantité']} ${consumption['type']} consommées',
-        };
-      }).toList();
-
-      setState(() {
-        dailyConsumptions = data; // Met à jour les consommations du jour
-      });
-    } catch (e) {
-      print('Erreur lors du chargement des consommations : $e');
+  /// Retourne le flux des consommations pour la date sélectionnée
+  Stream<QuerySnapshot> _getConsumptionsStream() {
+    final userId = FirebaseAuth.instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
+    if (userId == null) {
+      return const Stream.empty();
     }
+
+    // Début et fin du jour sélectionné en UTC
+    final startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day).toUtc();
+    final endOfDay = startOfDay.add(const Duration(days: 1)).toUtc();
+
+    print('Start of day: ${startOfDay.toIso8601String()}');
+    print('End of day: ${endOfDay.toIso8601String()}');
+
+    // Récupérer les données depuis Firestore
+    return FirebaseFirestore.instance
+        .collection('consommations')
+        .where('userId', isEqualTo: userId) // Filtrer par utilisateur
+        .where('date', isGreaterThanOrEqualTo: startOfDay.toIso8601String())
+        .where('date', isLessThan: endOfDay.toIso8601String())
+        .snapshots();
   }
 
   /// Change la date sélectionnée et recharge les consommations
@@ -65,7 +74,6 @@ class _JournalPageState extends State<JournalPage>
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
     });
-    _loadConsumptions();
   }
 
   @override
@@ -130,73 +138,121 @@ class _JournalPageState extends State<JournalPage>
             ),
             const SizedBox(height: 20),
 
-            // Contenu des onglets
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Vue "Activités"
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: _buildActivityList(),
-                  ),
-                  // Vue "Programme"
-                  const Center(child: Text('Programme - En construction')),
-                ],
-              ),
+          // Contenu des onglets
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // Vue "Activités"
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: _buildActivityList(),
+                ),
+                // Vue "Programme"
+                const Center(child: Text('Programme - En construction')),
+              ],
             ),
+          ),
+          const SizedBox(height: 20),
 
-            // Espace en bas pour éviter que le contenu soit caché par la TabBar
-            SizedBox(height: 20),
-          ],
-        ),
+          // Bouton "Ajouter une activité"
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: AddButton(),
+          ),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
 
   /// Liste des activités pour la date sélectionnée
   Widget _buildActivityList() {
-    if (dailyConsumptions.isEmpty) {
-      return const Center(
-        child: Text('Aucune consommation enregistrée pour cette date.'),
-      );
-    }
+    return StreamBuilder<QuerySnapshot>(
+      stream: _getConsumptionsStream(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text('Erreur lors du chargement des consommations.'));
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('Aucune consommation enregistrée pour cette date.'));
+        }
 
-    return ListView.builder(
-      itemCount: dailyConsumptions.length,
-      itemBuilder: (context, index) {
-        final activity = dailyConsumptions[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.grey[200],
-                child:
-                    const Icon(Icons.local_fire_department, color: Colors.grey),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      activity['description']!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+        final data = snapshot.data!.docs.map((doc) {
+          final consumption = doc.data() as Map<String, dynamic>;
+          print('Document data: $consumption');
+
+          // Logique conditionnelle pour ajuster la description
+          String unit;
+          String description;
+          if (consumption['type'] == 'Tabac') {
+            unit = consumption['quantity'] > 1 ? 'cigarettes' : 'cigarette';
+            description = '${consumption['quantity']} $unit consommée${consumption['quantity'] > 1 ? 's' : ''}';
+          } else if (consumption['type'] == 'Alcool') {
+            unit = consumption['quantity'] > 1 ? 'verres' : 'verre';
+            description = '${consumption['quantity']} $unit d\'alcool consommé${consumption['quantity'] > 1 ? 's' : ''}';
+          } else {
+            unit = consumption['type'];
+            description = '${consumption['quantity']} $unit consommé${consumption['quantity'] > 1 ? 's' : ''}';
+          }
+
+          return {
+            'time': DateFormat('HH:mm').format(DateTime.parse(consumption['date']).toLocal()),
+            'description': description,
+            'type': consumption['type'], // Ajoutez le type pour l'utiliser dans l'affichage
+          };
+        }).toList();
+
+        return ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final activity = data[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey[200],
+                    child: _getIconForConsumption(activity['type']),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          activity['description']!,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    activity['time']!,
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                ],
               ),
-              Text(
-                activity['time']!,
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
+  }
+
+  /// Retourne l'icône appropriée pour le type de consommation
+  Widget _getIconForConsumption(String type) {
+    switch (type) {
+      case 'Tabac':
+        return const Icon(Icons.smoking_rooms, color: Color.fromRGBO(4, 75, 217, 1));
+      case 'Alcool':
+        return const Icon(Icons.local_bar, color: Color.fromRGBO(4, 75, 217, 1));
+      default:
+        return const Icon(Icons.local_fire_department, color: Colors.grey);
+    }
   }
 }
