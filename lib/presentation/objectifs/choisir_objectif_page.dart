@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hygie_mobile/commons/header.dart';
+import 'package:hygie_mobile/presentation/objectifs/progression_page.dart';
+import 'package:hygie_mobile/services/app_router.dart';
 
 class ChoisirObjectifPage extends StatelessWidget {
   final String category;
@@ -11,7 +13,7 @@ class ChoisirObjectifPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -24,7 +26,8 @@ class ChoisirObjectifPage extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.pop(context); // Retour à la page précédente
+                      AppRouter().goBack(
+                          context); // Utiliser AppRouter pour revenir en arrière
                     },
                   ),
                   Text(
@@ -38,24 +41,7 @@ class ChoisirObjectifPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              clipBehavior: Clip.antiAlias,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                shadows: [
-                  BoxShadow(
-                    color: Color(0x19072250),
-                    blurRadius: 12,
-                    offset: Offset(0, 4),
-                    spreadRadius: 0,
-                  )
-                ],
-              ),
+            Expanded(
               child: Column(
                 children: [
                   _buildGoalOption(
@@ -104,7 +90,7 @@ class ChoisirObjectifPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),

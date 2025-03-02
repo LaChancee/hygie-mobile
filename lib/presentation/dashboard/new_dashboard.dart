@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/dashboard/context_card.dart';
 import 'package:hygie_mobile/presentation/dashboard/dasboard_content.dart';
-import 'package:hygie_mobile/presentation/dashboard/tapbar.dart';
 import 'package:hygie_mobile/presentation/dashboard/top_bar.dart';
 
-class Dashboard extends StatelessWidget {
+class NewDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -27,31 +23,32 @@ class Dashboard extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // ✅ TopBar (Barre supérieure)
+              // TopBar (Barre supérieure)
               TopBar(),
 
-              // ✅ ESPACE PRINCIPAL : Dashboard Content
+              // Contenu principal
               Expanded(
                 child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: screenHeight * 0.02),
+                      SizedBox(height: 10), // Réduit l'espace en haut
 
-                      // ✅ CardsContext (Carte avec les jours sans fumer)
+                      // CardsContext (Carte avec les jours sans fumer)
                       CardsContext(),
 
-                      SizedBox(height: screenHeight * 0.03),
+                      SizedBox(height: 10), // Réduit l'espace entre les cartes
 
-                      // ✅ ContentsDashboard (Widgets du Dashboard)
+                      // ContentsDashboard (Widgets du Dashboard)
                       ContentsDashboard(),
+
+                      // Espace en bas pour éviter que le contenu soit caché par la TabBar
+                      SizedBox(height: 20), // Réduit l'espace en bas
                     ],
                   ),
                 ),
               ),
-
-              // ✅ TabBar (Barre de navigation en bas)
-              ResponsiveTabBar(),
             ],
           ),
         ),

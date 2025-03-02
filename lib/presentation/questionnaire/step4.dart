@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/step5.dart';
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
 class Step4 extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class Step4 extends StatefulWidget {
 
 class _Step4State extends State<Step4> {
   final TextEditingController _controller = TextEditingController();
+  final UserProfileService _profileService = UserProfileService();
   bool isButtonEnabled = false;
 
   void _onTextChanged(String value) {
@@ -132,7 +134,11 @@ class _Step4State extends State<Step4> {
                 child: ElevatedButton(
                   onPressed: isButtonEnabled
                       ? () {
-                          print("Budget tabac : ${_controller.text} €");
+                          // Sauvegarder le budget mensuel
+                          double monthlyBudget =
+                              double.tryParse(_controller.text) ?? 0.0;
+                          _profileService.setMonthlyBudget(monthlyBudget);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Step5()),
@@ -161,7 +167,7 @@ class _Step4State extends State<Step4> {
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.05), // Ajout d’espace en bas
+              SizedBox(height: screenHeight * 0.05), // Ajout d'espace en bas
             ],
           ),
         ),

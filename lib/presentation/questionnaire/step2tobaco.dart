@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/step3.dart';
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
 class InputSelect extends StatefulWidget {
   final List<String> options;
@@ -96,6 +97,7 @@ class Step2 extends StatefulWidget {
 
 class _Step2State extends State<Step2> {
   String selectedOption = "Une fois par semaine"; // Option par défaut
+  final UserProfileService _profileService = UserProfileService();
 
   final List<String> options = [
     "Une fois par semaine",
@@ -172,6 +174,9 @@ class _Step2State extends State<Step2> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Sauvegarder la fréquence de consommation
+                    _profileService.setConsumptionFrequency(selectedOption);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -197,7 +202,7 @@ class _Step2State extends State<Step2> {
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Ajout d’un espace en bas
+              SizedBox(height: screenHeight * 0.03), // Ajout d'un espace en bas
             ],
           ),
         ),

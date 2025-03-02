@@ -3,20 +3,33 @@ import 'package:hygie_mobile/commons/header.dart';
 import 'package:hygie_mobile/presentation/recompense/hycoins_entete.dart';
 import 'package:hygie_mobile/presentation/recompense/reward_card.dart'; // Importer RewardCard
 
-class RecompensePage extends StatelessWidget {
+class RecompensePage extends StatefulWidget {
   const RecompensePage({Key? key}) : super(key: key);
+
+  @override
+  _RecompensePageState createState() => _RecompensePageState();
+}
+
+class _RecompensePageState extends State<RecompensePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(
-        title: '',
-        onNotificationPressed: () {
-          // Action à réaliser lorsque le bouton de notification est pressé
-          print('Notification pressée');
-        },
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

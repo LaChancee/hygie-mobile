@@ -9,13 +9,15 @@ import 'package:hygie_mobile/presentation/journal/modale_add_activity.dart';
 class JournalPage extends StatefulWidget {
   final bool openAddActivityModal;
 
-  const JournalPage({Key? key, this.openAddActivityModal = false}) : super(key: key);
+  const JournalPage({Key? key, this.openAddActivityModal = false})
+      : super(key: key);
 
   @override
   _JournalPageState createState() => _JournalPageState();
 }
 
-class _JournalPageState extends State<JournalPage> with SingleTickerProviderStateMixin {
+class _JournalPageState extends State<JournalPage>
+    with SingleTickerProviderStateMixin {
   DateTime selectedDate = DateTime.now();
   late TabController _tabController;
 
@@ -47,13 +49,16 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
 
   /// Retourne le flux des consommations pour la date sélectionnée
   Stream<QuerySnapshot> _getConsumptionsStream() {
-    final userId = FirebaseAuth.instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
+    final userId = FirebaseAuth
+        .instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
     if (userId == null) {
       return const Stream.empty();
     }
 
     // Début et fin du jour sélectionné en UTC
-    final startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day).toUtc();
+    final startOfDay =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day)
+            .toUtc();
     final endOfDay = startOfDay.add(const Duration(days: 1)).toUtc();
 
     print('Start of day: ${startOfDay.toIso8601String()}');
@@ -78,88 +83,90 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Header(title: ""),
-          const SizedBox(height: 20),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Header(title: ""),
+            const SizedBox(height: 20),
 
-          // Onglets "Activités" et "Programme"
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black54,
-              indicator: BoxDecoration(
-                color: const Color.fromRGBO(4, 75, 217, 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              tabs: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: const Tab(text: "Activités"),
+            // Onglets "Activités" et "Programme"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.black54,
+                indicator: BoxDecoration(
+                  color: const Color.fromRGBO(4, 75, 217, 1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: const Tab(text: "Programme"),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Affichage de la date choisie
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.chevron_left, color: Colors.blue),
-                  onPressed: () => _incrementDate(-1),
-                ),
-                Text(
-                  DateFormat('EEEE d MMMM', 'fr').format(selectedDate),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(4, 75, 217, 1),
+                tabs: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Activités"),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right, color: Colors.blue),
-                  onPressed: () => _incrementDate(1),
-                ),
-              ],
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Programme"),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Contenu des onglets
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Vue "Activités"
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: _buildActivityList(),
-                ),
-                // Vue "Programme"
-                const Center(child: Text('Programme - En construction')),
-              ],
+            // Affichage de la date choisie
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left, color: Colors.blue),
+                    onPressed: () => _incrementDate(-1),
+                  ),
+                  Text(
+                    DateFormat('EEEE d MMMM', 'fr').format(selectedDate),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(4, 75, 217, 1),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, color: Colors.blue),
+                    onPressed: () => _incrementDate(1),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Bouton "Ajouter une activité"
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: AddButton(),
-          ),
-          const SizedBox(height: 20),
-        ],
+            // Contenu des onglets
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Vue "Activités"
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _buildActivityList(),
+                  ),
+                  // Vue "Programme"
+                  const Center(child: Text('Programme - En construction')),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Bouton "Ajouter une activité"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: AddButton(),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -173,10 +180,12 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
-          return const Center(child: Text('Erreur lors du chargement des consommations.'));
+          return const Center(
+              child: Text('Erreur lors du chargement des consommations.'));
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('Aucune consommation enregistrée pour cette date.'));
+          return const Center(
+              child: Text('Aucune consommation enregistrée pour cette date.'));
         }
 
         final data = snapshot.data!.docs.map((doc) {
@@ -188,19 +197,24 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
           String description;
           if (consumption['type'] == 'Tabac') {
             unit = consumption['quantity'] > 1 ? 'cigarettes' : 'cigarette';
-            description = '${consumption['quantity']} $unit consommée${consumption['quantity'] > 1 ? 's' : ''}';
+            description =
+                '${consumption['quantity']} $unit consommée${consumption['quantity'] > 1 ? 's' : ''}';
           } else if (consumption['type'] == 'Alcool') {
             unit = consumption['quantity'] > 1 ? 'verres' : 'verre';
-            description = '${consumption['quantity']} $unit d\'alcool consommé${consumption['quantity'] > 1 ? 's' : ''}';
+            description =
+                '${consumption['quantity']} $unit d\'alcool consommé${consumption['quantity'] > 1 ? 's' : ''}';
           } else {
             unit = consumption['type'];
-            description = '${consumption['quantity']} $unit consommé${consumption['quantity'] > 1 ? 's' : ''}';
+            description =
+                '${consumption['quantity']} $unit consommé${consumption['quantity'] > 1 ? 's' : ''}';
           }
 
           return {
-            'time': DateFormat('HH:mm').format(DateTime.parse(consumption['date']).toLocal()),
+            'time': DateFormat('HH:mm')
+                .format(DateTime.parse(consumption['date']).toLocal()),
             'description': description,
-            'type': consumption['type'], // Ajoutez le type pour l'utiliser dans l'affichage
+            'type': consumption[
+                'type'], // Ajoutez le type pour l'utiliser dans l'affichage
           };
         }).toList();
 
@@ -224,7 +238,8 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
                       children: [
                         Text(
                           activity['description']!,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -246,9 +261,11 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
   Widget _getIconForConsumption(String type) {
     switch (type) {
       case 'Tabac':
-        return const Icon(Icons.smoking_rooms, color: Color.fromRGBO(4, 75, 217, 1));
+        return const Icon(Icons.smoking_rooms,
+            color: Color.fromRGBO(4, 75, 217, 1));
       case 'Alcool':
-        return const Icon(Icons.local_bar, color: Color.fromRGBO(4, 75, 217, 1));
+        return const Icon(Icons.local_bar,
+            color: Color.fromRGBO(4, 75, 217, 1));
       default:
         return const Icon(Icons.local_fire_department, color: Colors.grey);
     }

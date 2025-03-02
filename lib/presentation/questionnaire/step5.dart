@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/authentification/signup.dart';
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
 class Step5 extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class Step5 extends StatefulWidget {
 
 class _Step5State extends State<Step5> {
   String? selectedGender;
+  final UserProfileService _profileService = UserProfileService();
 
   void _selectGender(String gender) {
     setState(() {
@@ -78,6 +80,9 @@ class _Step5State extends State<Step5> {
                 child: ElevatedButton(
                   onPressed: selectedGender != null
                       ? () {
+                          // Sauvegarder le genre
+                          _profileService.setGender(selectedGender!);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Step6()),
@@ -107,7 +112,7 @@ class _Step5State extends State<Step5> {
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.05), // Ajout d’espace en bas
+              SizedBox(height: screenHeight * 0.05), // Ajout d'espace en bas
             ],
           ),
         ),
