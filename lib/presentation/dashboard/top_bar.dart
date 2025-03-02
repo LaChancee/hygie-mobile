@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/profil/profil_screen.dart';
 
 class TopBar extends StatelessWidget {
+  final bool showCagnotte;
+  final VoidCallback? onNotificationPressed;
+
+  const TopBar({
+    Key? key,
+    this.showCagnotte = true,
+    this.onNotificationPressed,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.transparent, // Couleur de fond transparente
-        boxShadow: [], // Retirer l'ombre
+        color: Colors.transparent,
+        boxShadow: [],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -17,30 +25,51 @@ class TopBar extends StatelessWidget {
           // Logo + Notification
           Row(
             children: [
-              // Icône de cloche outlined en couleur primaire
-              Icon(Icons.notifications_outlined, color: Theme.of(context).primaryColor, size: 40),
-              SizedBox(width: 16),
-              // Widget CagnotteMini
-              CagnotteMini(),
+              // Icône de cloche outlined en couleur primaire (taille réduite)
+              GestureDetector(
+                onTap: onNotificationPressed ?? () {},
+                child: Icon(
+                  Icons.notifications_outlined,
+                  color: Theme.of(context).primaryColor,
+                  size: 30,
+                ),
+              ),
+              if (showCagnotte) ...[
+                SizedBox(width: 16),
+                // Widget CagnotteMini
+                CagnotteMini(),
+              ],
             ],
           ),
 
-          // Profil (Avatar)
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
+          // Profil (Avatar avec l'image fournie)
+          GestureDetector(
+            onTap: () {
+              // Navigation vers la page profil
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF2D6D7B),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Image.asset(
+                'assets/images/logo_user.png',
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Icon(Icons.person, color: Colors.white),
           ),
         ],
       ),
@@ -86,11 +115,11 @@ class CagnotteMini extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(width: 4), // Ajout d'espace entre le chiffre et l'icône
+              SizedBox(width: 4),
               Container(
                 width: 16,
                 height: 16,
-                child: Image.asset('assets/images/blue_hycoins.png'), // Remplacez par le chemin de votre image
+                child: Image.asset('assets/images/blue_hycoins.png'),
               ),
             ],
           ),

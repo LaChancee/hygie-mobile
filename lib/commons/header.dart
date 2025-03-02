@@ -19,7 +19,11 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: Colors.transparent,
       leading: IconButton(
-        icon: const Icon(Icons.notifications, color: Colors.black),
+        icon: Icon(
+          Icons.notifications_outlined,
+          color: Theme.of(context).primaryColor,
+          size: 30,
+        ),
         onPressed: onNotificationPressed ?? () {},
       ),
       title: Text(
@@ -42,8 +46,25 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/logo_user.png'), // Image du profil
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFF2D6D7B),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.asset(
+                  'assets/images/logo_user.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
