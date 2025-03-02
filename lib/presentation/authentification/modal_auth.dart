@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/welcome_screen_questionnaire.dart';
+import 'package:hygie_mobile/presentation/authentification/auth_screen.dart';
 
 class ContentsArrival extends StatelessWidget {
   @override
@@ -99,32 +100,40 @@ class ContentsArrival extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 2, color: Color(0xFF8352FF)),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "J'ai déjà un compte",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF8352FF),
-                            fontSize: 16,
-                            fontFamily: 'DM Sans',
-                            fontWeight: FontWeight.w600,
-                          ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AuthScreen()),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 16),
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(width: 2, color: Color(0xFF8352FF)),
+                          borderRadius: BorderRadius.circular(999),
                         ),
-                      ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "J'ai déjà un compte",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xFF8352FF),
+                              fontSize: 16,
+                              fontFamily: 'DM Sans',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

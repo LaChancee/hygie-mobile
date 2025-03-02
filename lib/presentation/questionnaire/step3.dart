@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/step4.dart';
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
-class Step3 extends StatelessWidget {
+class Step3 extends StatefulWidget {
+  @override
+  _Step3State createState() => _Step3State();
+}
+
+class _Step3State extends State<Step3> {
+  final TextEditingController _cigarettesController = TextEditingController();
+  final UserProfileService _profileService = UserProfileService();
+  bool isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _cigarettesController.addListener(_updateButtonState);
+  }
+
+  void _updateButtonState() {
+    setState(() {
+      isButtonEnabled = _cigarettesController.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    _cigarettesController.removeListener(_updateButtonState);
+    _cigarettesController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -73,6 +102,7 @@ class Step3 extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: TextField(
+                  controller: _cigarettesController,
                   keyboardType: TextInputType.number, // Clavier numérique
                   style: TextStyle(
                     color: Color(0xFF222222),
@@ -100,14 +130,22 @@ class Step3 extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Step4()),
-                    );
-                  },
+                  onPressed: isButtonEnabled
+                      ? () {
+                          // Sauvegarder le nombre de cigarettes par jour
+                          int cigarettesPerDay =
+                              int.tryParse(_cigarettesController.text) ?? 0;
+                          _profileService.setCigarettesPerDay(cigarettesPerDay);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Step4()),
+                          );
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF044BD9),
+                    backgroundColor:
+                        isButtonEnabled ? Color(0xFF044BD9) : Color(0xFFBFBFBF),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
@@ -127,7 +165,7 @@ class Step3 extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.05), // Ajout d’espace en bas
+              SizedBox(height: screenHeight * 0.05), // Ajout d'espace en bas
             ],
           ),
         ),

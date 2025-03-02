@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/dashboard/new_dashboard.dart';
 import 'package:hygie_mobile/presentation/home_page.dart';
+import 'package:hygie_mobile/services/auth_service.dart';
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
 class Step6 extends StatefulWidget {
   @override
@@ -10,11 +12,46 @@ class Step6 extends StatefulWidget {
 class _Step6State extends State<Step6> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final UserProfileService _profileService = UserProfileService();
+  final AuthService _authService = AuthService();
   bool isPasswordVisible = false;
+  String _errorMessage = '';
+  bool _isLoading = false;
 
   bool get isFormValid {
     return emailController.text.isNotEmpty &&
         passwordController.text.length >= 8;
+  }
+
+  Future<void> _createAccount() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    try {
+      // Enregistrer l'email et le mot de passe dans le profil
+      _profileService.setEmailAndPassword(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+
+      // Créer le compte utilisateur avec les données du profil
+      await _authService.createUserWithProfile(_profileService.userProfile);
+
+      // Afficher la modale de succès
+      if (mounted) {
+        setState(() => _isLoading = false);
+        _showSuccessModal();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString();
+        });
+      }
+    }
   }
 
   @override
@@ -67,19 +104,25 @@ class _Step6State extends State<Step6> {
               // Champ Mot de passe
               _buildPasswordField(),
 
+              // Message d'erreur
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
+
               Spacer(), // Pousse le bouton vers le bas
 
               // Bouton "Suivant"
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: isFormValid
-                      ? () {
-                          _showSuccessModal();
-                        }
-                      : null,
+                  onPressed: isFormValid && !_isLoading ? _createAccount : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isFormValid
+                    backgroundColor: isFormValid && !_isLoading
                         ? const Color(0xFF044BD9)
                         : const Color(0xFFBFBFBF),
                     shape: RoundedRectangleBorder(
@@ -88,16 +131,25 @@ class _Step6State extends State<Step6> {
                     padding:
                         EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                   ),
-                  child: Text(
-                    'Suivant',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.045,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  child: _isLoading
+                      ? SizedBox(
+                          height: screenWidth * 0.05,
+                          width: screenWidth * 0.05,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          'Suivant',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.045,
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
 
@@ -153,10 +205,14 @@ class _Step6State extends State<Step6> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
+                    // Réinitialiser le profil après la création du compte
+                    _profileService.resetProfile();
+
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
-                      
+                      (route) =>
+                          false, // Supprimer toutes les routes précédentes
                     );
                   },
                   style: ElevatedButton.styleFrom(

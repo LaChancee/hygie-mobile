@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/questionnaire/step2tobaco.dart'; // Assurez-vous d'importer la page Step2
+import 'package:hygie_mobile/services/user_profile_service.dart';
 
 class Step1 extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class Step1 extends StatefulWidget {
 
 class _Step1State extends State<Step1> {
   List<String> selectedOptions = [];
+  final UserProfileService _profileService = UserProfileService();
 
   void _toggleSelection(String option) {
     setState(() {
@@ -86,7 +88,8 @@ class _Step1State extends State<Step1> {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFFDDD4FF) : const Color(0xFFDFE5EE),
+            color:
+                isSelected ? const Color(0xFFDDD4FF) : const Color(0xFFDFE5EE),
             border: Border.all(
               color: isSelected ? const Color(0xFF8352FF) : Colors.transparent,
               width: 1,
@@ -97,7 +100,9 @@ class _Step1State extends State<Step1> {
             child: Text(
               text,
               style: TextStyle(
-                color: isSelected ? const Color(0xFF8352FF) : const Color(0xFF222222),
+                color: isSelected
+                    ? const Color(0xFF8352FF)
+                    : const Color(0xFF222222),
                 fontSize: screenWidth * 0.045,
                 fontFamily: 'DM Sans',
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
@@ -116,14 +121,22 @@ class _Step1State extends State<Step1> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: selectedOptions.isEmpty ? null : () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Step2()), // Naviguer vers Step2
-          );
-        },
+        onPressed: selectedOptions.isEmpty
+            ? null
+            : () {
+                // Sauvegarder les addictions sélectionnées
+                _profileService.setAddictions(selectedOptions);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Step2()), // Naviguer vers Step2
+                );
+              },
         style: ElevatedButton.styleFrom(
-          backgroundColor: selectedOptions.isEmpty ? const Color(0xFFBFBFBF) : const Color(0xFF044BD9),
+          backgroundColor: selectedOptions.isEmpty
+              ? const Color(0xFFBFBFBF)
+              : const Color(0xFF044BD9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(999),
           ),

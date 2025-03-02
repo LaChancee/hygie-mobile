@@ -33,18 +33,18 @@ class NewDashboard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
+                      SizedBox(height: 10), // Réduit l'espace en haut
 
                       // CardsContext (Carte avec les jours sans fumer)
                       CardsContext(),
 
-                      SizedBox(height: 20),
+                      SizedBox(height: 10), // Réduit l'espace entre les cartes
 
                       // ContentsDashboard (Widgets du Dashboard)
                       ContentsDashboard(),
 
                       // Espace en bas pour éviter que le contenu soit caché par la TabBar
-                      SizedBox(height: 80),
+                      SizedBox(height: 20), // Réduit l'espace en bas
                     ],
                   ),
                 ),

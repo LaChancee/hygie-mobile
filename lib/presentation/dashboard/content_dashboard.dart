@@ -12,12 +12,16 @@ class ContentsDashboard extends StatelessWidget {
         Container(
           width: screenWidth * 0.95, // Largeur dynamique
           constraints: BoxConstraints(
+            minHeight: screenHeight *
+                0.7, // Hauteur minimale pour s'étendre vers le bas
             maxWidth: 600, // Max sur les grands écrans
           ),
           padding: EdgeInsets.symmetric(
             vertical: screenHeight * 0.03,
             horizontal: screenWidth * 0.04,
           ),
+          margin: EdgeInsets.only(
+              bottom: 20), // Marge en bas pour éviter que la carte soit coupée
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
@@ -31,6 +35,7 @@ class ContentsDashboard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max, // Prend toute la hauteur disponible
             children: [
               // ✅ CARTE PRINCIPALE
               Cards(), // Utiliser le widget Cards
@@ -63,6 +68,9 @@ class ContentsDashboard extends StatelessWidget {
 
               // ✅ OFFRE HYGIÉ+
               _buildHygiePlusOffer(screenWidth),
+
+              // Espace supplémentaire en bas pour s'assurer que la carte s'étend
+              SizedBox(height: screenHeight * 0.05),
             ],
           ),
         ),
