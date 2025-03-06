@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HycoinsHeader extends StatelessWidget {
   const HycoinsHeader({Key? key}) : super(key: key);
@@ -59,14 +61,49 @@ class HycoinsHeader extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      '20 145',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 32,
-                                        fontFamily: 'DM Sans',
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                    StreamBuilder<DocumentSnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('profil')
+                                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        }
+                                        if (snapshot.hasError) {
+                                          return const Text(
+                                            'Erreur',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 32,
+                                              fontFamily: 'DM Sans',
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          );
+                                        }
+                                        if (!snapshot.hasData || !snapshot.data!.exists) {
+                                          return const Text(
+                                            '0',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 32,
+                                              fontFamily: 'DM Sans',
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          );
+                                        }
+                                        final data = snapshot.data!.data() as Map<String, dynamic>;
+                                        final points = data['points'] ?? 0;
+                                        return Text(
+                                          points.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 32,
+                                            fontFamily: 'DM Sans',
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        );
+                                      },
                                     ),
                                     const SizedBox(width: 8),
                                     Container(

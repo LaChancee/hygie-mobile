@@ -23,7 +23,7 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
               showCagnotte: false,
             ),
           ),
-          SizedBox(height: 16), // Espacement entre le header et les objectifs
+          const SizedBox(height: 16), // Espacement entre le header et les objectifs
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -33,10 +33,10 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                       child: Text('Erreur lors du chargement des objectifs'));
                 }
 
@@ -47,11 +47,17 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                         'description': objective['description'],
                         'type': objective['type'],
                       };
-                    }).toList() ??
-                    [];
+                    }).toList() ?? [];
 
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 16), // Espacement entre le header et les objectifs
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: const MesObjectifs(), // Ajouter le widget MesObjectifs ici
+                    ),
+                    const SizedBox(height: 16), // Espacement entre le titre et les objectifs
                     if (userObjectives.isNotEmpty)
                       Expanded(
                         child: ListView.builder(
@@ -71,29 +77,39 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                                         builder: (context) => ProgressionPage(
                                           type: objective['type'],
                                           title: objective['description'],
-                                          objectifId: objective[
-                                              'id'], // Passez l'ID ici
+                                          objectifId: objective['id'], // Passez l'ID ici
                                         ),
                                       ),
                                     );
                                   },
                                 ),
-                                SizedBox(
-                                    height:
-                                        20), // Espacement entre les rubriques
+                                const SizedBox(
+                                    height: 20), // Espacement entre les rubriques
                               ],
                             );
                           },
                         ),
                       )
                     else
-                      Column(
-                        children: [
-                          Center(child: Text('Aucun objectif trouvé.')),
-                          SizedBox(
-                              height:
-                                  40), // Espacement entre le message et le bouton
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: const [
+                            SizedBox(
+                              width: 358,
+                              child: Text(
+                                'Fixez-vous de nouveaux objectifs, accomplissez-les et obtenez plus de récompenses !',
+                                style: TextStyle(
+                                  color: Color(0xFF222222),
+                                  fontSize: 14,
+                                  fontFamily: 'DM Sans',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 40), // Espacement entre le message et le bouton
+                          ],
+                        ),
                       ),
                   ],
                 );
@@ -120,16 +136,16 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16),
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           minHeight: 94, // Hauteur minimale dynamique
         ),
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x19072250),
               blurRadius: 12,
@@ -142,12 +158,12 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: ShapeDecoration(
-                color: Color(0xFFDFE6EE),
+                color: const Color(0xFFDFE6EE),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              child: Icon(icon, color: Color.fromRGBO(4, 75, 217, 1)),
+              child: Icon(icon, color: const Color.fromRGBO(4, 75, 217, 1)),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -156,7 +172,7 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF222222),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -167,7 +183,7 @@ class _ObjectifsPageState extends State<ObjectifsPage> {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF707070),
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -213,17 +229,16 @@ class AddButton extends StatelessWidget {
         );
       },
       child: Container(
-        width: MediaQuery.of(context).size.width -
-            32, // Prendre toute la largeur de l'écran avec une marge de 16 de chaque côté
+        width: MediaQuery.of(context).size.width - 32, // Prendre toute la largeur de l'écran avec une marge de 16 de chaque côté
         height: 72,
         padding: const EdgeInsets.all(16),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: Color(0xFF044BD9),
+          color: const Color(0xFF044BD9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x19072250),
               blurRadius: 12,
@@ -241,7 +256,7 @@ class AddButton extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
-                color: Color(0xFFDAE0F6),
+                color: const Color(0xFFDAE0F6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
@@ -255,14 +270,14 @@ class AddButton extends StatelessWidget {
                     width: 24,
                     height: 24,
                     clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(),
-                    child: Icon(Icons.add, color: Color(0xFF044BD9)),
+                    decoration: const BoxDecoration(),
+                    child: const Icon(Icons.add, color: Color(0xFF044BD9)),
                   ),
                 ],
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(
+            const Expanded(
               child: Text(
                 'Me fixer un objectif',
                 style: TextStyle(
@@ -276,6 +291,31 @@ class AddButton extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MesObjectifs extends StatelessWidget {
+  const MesObjectifs({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        SizedBox(
+          width: 358,
+          child: Text(
+            'Mes objectifs',
+            style: TextStyle(
+              color: Color(0xFF222222),
+              fontSize: 20,
+              fontFamily: 'DM Sans',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
