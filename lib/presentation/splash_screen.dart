@@ -17,26 +17,25 @@ class _SplashscreenState extends State<Splashscreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(Duration(seconds: 2), () {
         if (mounted) {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent, // Fond transparent
-            builder: (BuildContext context) {
-              return _buildBlurredModal();
-            },
-          );
+          _showAuthModal();
         }
       });
     });
   }
 
-  Widget _buildBlurredModal() {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Ajuster le flou
-      child: Container(
-        color: Colors.transparent, // Couleur de fond avec opacité
-        child: ContentsArrival(),
+  void _showAuthModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height,
       ),
+      builder: (BuildContext context) {
+        return ContentsArrival();
+      },
     );
   }
 
@@ -44,80 +43,94 @@ class _SplashscreenState extends State<Splashscreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final double safeAreaTop = MediaQuery.of(context).padding.top;
+    final double safeAreaBottom = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Fond avec dégradé de couleur
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xB2A885FF).withOpacity(0.4), // Violet
-                  Color(0xFFB2F99D).withOpacity(0.4), // Vert
-                  Color(0xFF80D1FF).withOpacity(0.4), // Bleu
-                ],
-                stops: [0.0, 0.5, 1.0],
-              ),
-            ),
-          ),
-
-          // Effet de flou léger pour adoucir le dégradé
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-
-          // Logo centré
-          Center(
-            child: Image.asset(
-              'assets/images/HygieBlack.png',
-              width: screenWidth * 0.4,
-              height: screenHeight * 0.2,
-              fit: BoxFit.contain,
-            ),
-          ),
-
-          // Texte sous le logo
-          Align(
-            alignment: Alignment(0.0, 0.3),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Nous sommes heureux de pouvoir vous accompagner !',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF6C33FF),
-                  fontSize: screenWidth * 0.05, // Responsive font size
-                  fontFamily: 'DM Sans',
-                  fontWeight: FontWeight.w600,
+      body: Container(
+        width: screenWidth,
+        height: screenHeight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Fond avec dégradé de couleur
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xB2A885FF).withOpacity(0.4), // Violet
+                    Color(0xFFB2F99D).withOpacity(0.4), // Vert
+                    Color(0xFF80D1FF).withOpacity(0.4), // Bleu
+                  ],
+                  stops: [0.0, 0.5, 1.0],
                 ),
               ),
             ),
-          ),
 
-          // Indicateur bas
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: Container(
-                width: screenWidth * 0.3,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Color(0xFF222222),
-                  borderRadius: BorderRadius.circular(100),
+            // Effet de flou léger pour adoucir le dégradé
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  color: Colors.transparent,
                 ),
               ),
             ),
-          ),
-        ],
+
+            // Contenu principal
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Logo centré
+                    Image.asset(
+                      'assets/images/HygieBlack.png',
+                      width: screenWidth * 0.4,
+                      height: screenHeight * 0.15,
+                      fit: BoxFit.contain,
+                    ),
+
+                    SizedBox(height: screenHeight * 0.04),
+
+                    // Texte sous le logo
+                    Text(
+                      'Nous sommes heureux de pouvoir vous accompagner !',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF6C33FF),
+                        fontSize: screenWidth * 0.045, // Responsive font size
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Indicateur bas
+            Positioned(
+              bottom: 20 + safeAreaBottom,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  width: screenWidth * 0.3,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF222222),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

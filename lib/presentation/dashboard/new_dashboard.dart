@@ -8,6 +8,8 @@ class NewDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -21,6 +23,7 @@ class NewDashboard extends StatelessWidget {
           ),
         ),
         child: SafeArea(
+          bottom: false, // Ne pas ajouter de marge en bas
           child: Column(
             children: [
               // TopBar (Barre supérieure)
@@ -28,25 +31,16 @@ class NewDashboard extends StatelessWidget {
 
               // Contenu principal
               Expanded(
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10), // Réduit l'espace en haut
+                child: Column(
+                  children: [
+                    // CardsContext (Carte avec les jours sans fumer)
+                    CardsContext(),
 
-                      // CardsContext (Carte avec les jours sans fumer)
-                      CardsContext(),
-
-                      SizedBox(height: 10), // Réduit l'espace entre les cartes
-
-                      // ContentsDashboard (Widgets du Dashboard)
-                      ContentsDashboard(),
-
-                      // Espace en bas pour éviter que le contenu soit caché par la TabBar
-                      SizedBox(height: 20), // Réduit l'espace en bas
-                    ],
-                  ),
+                    // ContentsDashboard (Widgets du Dashboard)
+                    Expanded(
+                      child: ContentsDashboard(),
+                    ),
+                  ],
                 ),
               ),
             ],

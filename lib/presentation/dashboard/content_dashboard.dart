@@ -7,206 +7,155 @@ class ContentsDashboard extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Column(
-      children: [
-        Container(
-          width: screenWidth * 0.95, // Largeur dynamique
-          constraints: BoxConstraints(
-            minHeight: screenHeight *
-                0.7, // Hauteur minimale pour s'étendre vers le bas
-            maxWidth: 600, // Max sur les grands écrans
-          ),
-          padding: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.03,
-            horizontal: screenWidth * 0.04,
-          ),
-          margin: EdgeInsets.only(
-              bottom: 20), // Marge en bas pour éviter que la carte soit coupée
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x1406214F),
-                blurRadius: 24,
-                offset: Offset(0, -8),
-              )
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max, // Prend toute la hauteur disponible
-            children: [
-              // ✅ CARTE PRINCIPALE
-              Cards(), // Utiliser le widget Cards
+    // Facteur d'échelle pour les petits écrans
+    double scaleFactor = screenWidth < 360 ? 0.6 : 1.0;
 
-              const SizedBox(height: 16),
-
-              // ✅ TITRE "Mes Widgets"
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Mes widgets',
-                    style: TextStyle(
-                      color: Color(0xFF044BD9),
-                      fontSize: screenWidth * 0.045,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Icon(Icons.widgets,
-                      color: Colors.blue, size: screenWidth * 0.06),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // ✅ BOUTON "Ajouter un Widget"
-              _buildAddWidgetButton(screenWidth, screenHeight),
-
-              const SizedBox(height: 16),
-
-              // ✅ OFFRE HYGIÉ+
-              _buildHygiePlusOffer(screenWidth),
-
-              // Espace supplémentaire en bas pour s'assurer que la carte s'étend
-              SizedBox(height: screenHeight * 0.05),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ✅ Bouton "Ajouter un Widget"
-  Widget _buildAddWidgetButton(double screenWidth, double screenHeight) {
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-        decoration: BoxDecoration(
-          color: Color(0xFFF5F8FC),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Color(0xFFDAE0F6)),
-        ),
-        child: Column(
-          children: [
-            Icon(Icons.add, size: screenWidth * 0.07, color: Colors.blue),
-            Text(
-              'Ajouter un widget',
-              style: TextStyle(
-                color: Color(0xFF044BD9),
-                fontSize: screenWidth * 0.04,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ✅ Offre Hygie+
-  Widget _buildHygiePlusOffer(double screenWidth) {
-    return Stack(
-      children: [
-        // Conteneur avec dégradé (bordure)
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF90CAF9), // Bleu clair
-                  Color(0xFF2196F3), // Bleu moyen
-                  Color(0xFF044BD9), // Bleu primaire
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
-        // Conteneur blanc intérieur (contenu)
-        Container(
-          width: double.infinity,
-          margin: EdgeInsets.all(2), // Crée l'effet de bordure
-          padding: EdgeInsets.all(screenWidth * 0.04),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14), // Légèrement plus petit
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Découvrez notre offre Hygie+ !',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF044BD9),
-                  fontSize: screenWidth * 0.05,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // ✅ Prix
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildPriceTag('3,99€ /mois', Color(0xFF044BD9), screenWidth),
-                  const SizedBox(width: 8),
-                  _buildPriceTag('32,99€ /an', Color(0xFF84F266), screenWidth),
-                ],
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                'Accédez à des outils supplémentaires, des programmes de sevrage et obtenez des récompenses supplémentaires pour chaque effort !',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF222222),
-                  fontSize: screenWidth * 0.035,
-                  height: 1.4,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.arrow_forward, size: screenWidth * 0.04),
-                label: Text("Découvrir"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF044BD9),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ✅ Widget pour afficher le prix avec une bordure arrondie
-  Widget _buildPriceTag(String text, Color borderColor, double screenWidth) {
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.04, vertical: screenWidth * 0.01),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderColor),
-        borderRadius: BorderRadius.circular(999),
+      width: screenWidth * 0.95, // Largeur dynamique
+      constraints: BoxConstraints(
+        maxWidth: 600, // Max sur les grands écrans
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Color(0xFF222222),
-          fontSize: screenWidth * 0.035,
-          fontWeight: FontWeight.w600,
+      margin: EdgeInsets.only(bottom: 0), // Pas de marge en bas
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x1406214F),
+            blurRadius: 24,
+            offset: Offset(0, -8),
+          )
+        ],
+      ),
+      // Utiliser un SingleChildScrollView pour éviter les problèmes de débordement
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            // Définir une hauteur minimale mais pas maximale
+            minHeight: 100,
+          ),
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // Ne pas prendre plus d'espace que nécessaire
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Partie supérieure avec padding
+              Padding(
+                padding: EdgeInsets.all(screenWidth * 0.03 * scaleFactor),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ✅ CARTE PRINCIPALE - Utiliser FittedBox pour s'assurer qu'elle s'adapte
+                    SizedBox(
+                      width: double.infinity,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          width: screenWidth * 0.9,
+                          child: Cards(),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 8 * scaleFactor),
+
+                    // ✅ TITRE "Mes Widgets" - Simplifié
+                    Text(
+                      'Mes widgets',
+                      style: TextStyle(
+                        color: Color(0xFF044BD9),
+                        fontSize: screenWidth * 0.035 * scaleFactor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    SizedBox(height: 8 * scaleFactor),
+
+                    // ✅ BOUTON "Ajouter un Widget" - Simplifié
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.008 * scaleFactor,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF5F8FC),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Color(0xFFDAE0F6)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '+ Ajouter un widget',
+                          style: TextStyle(
+                            color: Color(0xFF044BD9),
+                            fontSize: screenWidth * 0.03 * scaleFactor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ✅ OFFRE HYGIÉ+ - Simplifiée
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF044BD9),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                padding: EdgeInsets.all(screenWidth * 0.03 * scaleFactor),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Découvrez Hygie+',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.035 * scaleFactor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(height: 4 * scaleFactor),
+                    Text(
+                      'À partir de 3,99€/mois',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.028 * scaleFactor,
+                      ),
+                    ),
+                    SizedBox(height: 6 * scaleFactor),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Découvrir"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Color(0xFF044BD9),
+                        minimumSize: Size(0, 0),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12 * scaleFactor,
+                          vertical: 4 * scaleFactor,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 4 * scaleFactor),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
