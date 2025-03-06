@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/profil/profil_screen.dart';
+import '../../data/services/hycoins_service.dart';
+import '../../data/services/profile_service.dart';
+import '../../widgets/hycoins_mini.dart';
 
 class TopBar extends StatelessWidget {
   final bool showCagnotte;
@@ -58,10 +61,10 @@ class TopBar extends StatelessWidget {
                 ),
               ],
 
-              // Cagnotte (si activée)
+              // Cagnotte et Points (si activés)
               if (showCagnotte) ...[
                 SizedBox(width: 16),
-                CagnotteMini(),
+                BalanceContainer(),
               ],
             ],
           ),
@@ -101,50 +104,47 @@ class TopBar extends StatelessWidget {
   }
 }
 
-class CagnotteMini extends StatelessWidget {
+class BalanceContainer extends StatefulWidget {
+  @override
+  State<BalanceContainer> createState() => _BalanceContainerState();
+}
+
+class _BalanceContainerState extends State<BalanceContainer> {
+  int _hycoinsBalance = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBalances();
+  }
+
+  Future<void> _loadBalances() async {
+    try {
+      final hyCoinsService = HyCoinsService();
+      final balances = await hyCoinsService.getBalanceAndPoints();
+      setState(() {
+        _hycoinsBalance = balances['hycoins'] ?? 0;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Erreur lors du chargement des soldes: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 66,
-      height: 34,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(124),
+    return Row(
+      children: [
+        // HyCoins
+        HyCoinsMini(
+          balance: _hycoinsBalance,
+          isLoading: _isLoading,
         ),
-        shadows: [
-          BoxShadow(
-            color: Color(0x1E06214F),
-            blurRadius: 12,
-            offset: Offset(0, 0),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            '0',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF044BD9),
-              fontSize: 14,
-              fontFamily: 'DM sans',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(width: 4),
-          Container(
-            width: 16,
-            height: 16,
-            child: Image.asset('assets/images/blue_hycoins.png'),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
