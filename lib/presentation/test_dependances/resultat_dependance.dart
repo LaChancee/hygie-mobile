@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../data/providers/dependance_test_provider.dart';
 import '../../data/models/dependance_test.dart';
 import '../../data/services/hycoins_service.dart';
+import '../../data/services/profile_service.dart';
 import '../../widgets/notification_gain.dart';
 import 'proposition.dart';
 
@@ -21,24 +22,24 @@ class ResultatDependancePage extends StatefulWidget {
 class _ResultatDependancePageState extends State<ResultatDependancePage> {
   DependanceTest? _test;
   bool _isLoading = true;
-  int _hycoinsBalance = 0;
+  int _profilePoints = 0;
 
   @override
   void initState() {
     super.initState();
     _loadTestResult();
-    _loadHyCoinsBalance();
+    _loadPoints();
   }
 
-  Future<void> _loadHyCoinsBalance() async {
+  Future<void> _loadPoints() async {
     try {
-      final hyCoinsService = HyCoinsService();
-      final balance = await hyCoinsService.getBalance();
+      final profileService = ProfileService();
+      final points = await profileService.getPoints();
       setState(() {
-        _hycoinsBalance = balance;
+        _profilePoints = points;
       });
     } catch (e) {
-      print("Erreur lors du chargement du solde HyCoins: $e");
+      print("Erreur lors du chargement des points: $e");
     }
   }
 
@@ -98,30 +99,6 @@ class _ResultatDependancePageState extends State<ResultatDependancePage> {
           icon: const Icon(Icons.arrow_back, color: Color(0xFF222222)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                Text(
-                  '$_hycoinsBalance',
-                  style: const TextStyle(
-                    color: Color(0xFF044BD9),
-                    fontSize: 16,
-                    fontFamily: 'DM sans',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Image.asset(
-                  'assets/images/hycoins.png',
-                  width: 20,
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: _isLoading

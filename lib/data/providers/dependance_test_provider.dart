@@ -188,33 +188,44 @@ class DependanceTestProvider extends ChangeNotifier {
 
   // Soumettre le test et enregistrer dans Firestore
   Future<DependanceTest> submitTest() async {
-    final score = calculateScore();
-    final level = getDependanceLevel();
-
-    // Obtenir l'userId actuel
-    final userId = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
-
-    final test = DependanceTest(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      userId: userId,
-      dependanceType: _dependanceType,
-      score: score,
-      level: level,
-      createdAt: DateTime.now(),
-      responses: Map.from(_responses),
-    );
+    _isLoading = true;
+    notifyListeners();
 
     try {
-      // Enregistrer dans Firestore
-      await FirebaseFirestore.instance
-          .collection('dependance_tests')
-          .doc(test.id)
-          .set(test.toMap());
-    } catch (e) {
-      print("Erreur lors de l'enregistrement du test: $e");
-    }
+      print('Soumission du test de dépendance au ${_dependanceType}');
+      print('Réponses: $_responses');
 
-    return test;
+      // Utiliser le service de dépendance pour sauvegarder le test
+      // Cela attribuera également des HyCoins
+      DependanceTest test = await _dependanceService.saveTest(
+        dependanceType: _dependanceType,
+        responses: _responses,
+      );
+
+      _lastTest = test;
+      _isLoading = false;
+      notifyListeners();
+
+      return test;
+    } catch (e) {
+      print('Erreur lors de la soumission du test: $e');
+      _isLoading = false;
+      notifyListeners();
+
+      // En cas d'erreur, retourner un objet avec un score calculé localement
+      int score = calculateScore();
+      String level = getDependanceLevel();
+
+      return DependanceTest(
+        id: 'local-${DateTime.now().millisecondsSinceEpoch}',
+        userId: FirebaseAuth.instance.currentUser?.uid ?? 'anonymous',
+        dependanceType: _dependanceType,
+        responses: Map.from(_responses),
+        score: score,
+        level: level,
+        createdAt: DateTime.now(),
+      );
+    }
   }
 
   // Réinitialiser le test
