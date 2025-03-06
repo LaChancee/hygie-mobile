@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:hygie_mobile/presentation/test_dependances/test_dependances.dart';
 
 class ContentsDashboard extends StatelessWidget {
   @override
@@ -27,7 +28,7 @@ class ContentsDashboard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDependencyTestCard(isLargeScreen),
+          _buildDependencyTestCard(context, isLargeScreen),
           const SizedBox(height: 16),
           _buildSectionTitle('Mes widgets'),
           const SizedBox(height: 16),
@@ -39,49 +40,58 @@ class ContentsDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildDependencyTestCard(bool isLargeScreen) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Color(0xFFF5F8FC),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        children: [
-          // 
-          // Contenu principal
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Text(
-                      'Testez votre niveau de dépendance',
-                      style: TextStyle(
-                        color: Color(0xFF6C33FF),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+  Widget _buildDependencyTestCard(BuildContext context, bool isLargeScreen) {
+    return GestureDetector(
+      onTap: () {
+        // Naviguer vers la page de test de dépendance
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TestDependancePage()),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Color(0xFFF5F8FC),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          children: [
+            //
+            // Contenu principal
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        'Testez votre niveau de dépendance',
+                        style: TextStyle(
+                          color: Color(0xFF6C33FF),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Fixez-vous des objectifs et obtenez des données plus détaillées.',
-                      style: TextStyle(
-                        color: Color(0xFF222222),
-                        fontSize: 14,
+                      const SizedBox(height: 4),
+                      Text(
+                        'Fixez-vous des objectifs et obtenez des données plus détaillées.',
+                        style: TextStyle(
+                          color: Color(0xFF222222),
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              if (isLargeScreen) const SizedBox(width: 16),
-              _buildScoreBadge(),
-            ],
-          ),
-        ],
+                if (isLargeScreen) const SizedBox(width: 16),
+                _buildScoreBadge(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -206,9 +216,8 @@ class ContentsDashboard extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF044BD9),
               shape: StadiumBorder(),
-             
             ),
-            ),
+          ),
         ],
       ),
     );
