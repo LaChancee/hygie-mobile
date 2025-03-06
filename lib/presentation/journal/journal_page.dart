@@ -1,35 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hygie_mobile/commons/header.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hygie_mobile/presentation/journal/add_button.dart';
+import 'package:hygie_mobile/presentation/journal/modale_add_activity.dart';
 
 class JournalPage extends StatefulWidget {
-  const JournalPage({Key? key}) : super(key: key);
+  final bool openAddActivityModal;
+
+  const JournalPage({Key? key, this.openAddActivityModal = false})
+      : super(key: key);
 
   @override
   _JournalPageState createState() => _JournalPageState();
 }
 
-class _JournalPageState extends State<JournalPage> with SingleTickerProviderStateMixin {
+class _JournalPageState extends State<JournalPage>
+    with SingleTickerProviderStateMixin {
   DateTime selectedDate = DateTime.now();
   late TabController _tabController;
-
-  final Map<DateTime, List<Map<String, String>>> activities = {
-    DateTime.now(): [
-      {'time': '12:05', 'description': '2 cigarettes consommées'},
-      {'time': '10:23', 'description': '1 cigarette consommée'},
-    ],
-    DateTime(2024, 10, 9): [
-      {'time': '09:30', 'description': '2 cigarettes consommées'},
-      {'time': '10:23', 'description': '1 cigarette consommée'},
-    ],
-  };
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    if (widget.openAddActivityModal) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAddActivityModal();
+      });
+    }
   }
 
+  void _showAddActivityModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return ModaleAddActivity();
+      },
+    );
+  }
+
+  /// Retourne le flux des consommations pour la date sélectionnée
+  Stream<QuerySnapshot> _getConsumptionsStream() {
+    final userId = FirebaseAuth
+        .instance.currentUser?.uid; // Récupérer l'ID de l'utilisateur actuel
+    if (userId == null) {
+      return const Stream.empty();
+    }
+
+    // Début et fin du jour sélectionné en UTC
+    final startOfDay =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day)
+            .toUtc();
+    final endOfDay = startOfDay.add(const Duration(days: 1)).toUtc();
+
+    print('Start of day: ${startOfDay.toIso8601String()}');
+    print('End of day: ${endOfDay.toIso8601String()}');
+
+    // Récupérer les données depuis Firestore
+    return FirebaseFirestore.instance
+        .collection('consommations')
+        .where('userId', isEqualTo: userId) // Filtrer par utilisateur
+        .where('date', isGreaterThanOrEqualTo: startOfDay.toIso8601String())
+        .where('date', isLessThan: endOfDay.toIso8601String())
+        .snapshots();
+  }
+
+  /// Change la date sélectionnée et recharge les consommations
   void _incrementDate(int days) {
     setState(() {
       selectedDate = selectedDate.add(Duration(days: days));
@@ -39,132 +83,191 @@ class _JournalPageState extends State<JournalPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Header(title: ""),
-          SizedBox(height: 20),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Header(title: ""),
+            const SizedBox(height: 20),
 
-          // Onglets "Activités" et "Programme"
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.white, // Couleur du texte sélectionné
-              unselectedLabelColor: Colors.black54,
-              indicator: BoxDecoration(
-                color: Color.fromRGBO(4, 75, 217, 1), // Fond bleu pour l'onglet actif
-                borderRadius: BorderRadius.circular(8), // Coins arrondis
+            // Onglets "Activités" et "Programme"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.black54,
+                indicator: BoxDecoration(
+                  color: const Color.fromRGBO(4, 75, 217, 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                tabs: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Activités"),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Tab(text: "Programme"),
+                  ),
+                ],
               ),
-              tabs: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5, // Largeur personnalisée
-                  child: Tab(
-                    text: "Activités",
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5, // Largeur personnalisée
-                  child: Tab(
-                    text: "Programme",
-                  ),
-                ),
-              ],
             ),
-          ),
-          SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Affichage de la date choisie (sans carte)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.chevron_left, color: Colors.blue),
-                  onPressed: () => _incrementDate(-1),
-                ),
-                // Texte de la date avec style de couleur
-                Text(
-                  DateFormat('EEEE d MMMM').format(selectedDate),
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(4, 75, 217, 1)), // Couleur bleue
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right, color: Colors.blue),
-                  onPressed: () => _incrementDate(1),
-                ),
-              ],
+            // Affichage de la date choisie
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left, color: Colors.blue),
+                    onPressed: () => _incrementDate(-1),
+                  ),
+                  Text(
+                    DateFormat('EEEE d MMMM', 'fr').format(selectedDate),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(4, 75, 217, 1),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, color: Colors.blue),
+                    onPressed: () => _incrementDate(1),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Contenu des onglets
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Vue "Activités"
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: _buildActivityList(selectedDate),
-                ),
-                // Vue "Programme"
-                const Center(child: Text('Programme - En construction')),
-              ],
+            // Contenu des onglets
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Vue "Activités"
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _buildActivityList(),
+                  ),
+                  // Vue "Programme"
+                  const Center(child: Text('Programme - En construction')),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+
+            // Bouton "Ajouter une activité"
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: AddButton(),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
 
-  // Méthode pour construire la liste des activités du jour
-  Widget _buildActivityList(DateTime date) {
-    final formattedDate = DateTime(date.year, date.month, date.day);
-    final dailyActivities = activities[formattedDate] ?? [];
+  /// Liste des activités pour la date sélectionnée
+  Widget _buildActivityList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _getConsumptionsStream(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Center(
+              child: Text('Erreur lors du chargement des consommations.'));
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(
+              child: Text('Aucune consommation enregistrée pour cette date.'));
+        }
 
-    if (dailyActivities.isEmpty) {
-      return const Center(child: Text('Aucune activité enregistrée pour cette date.'));
-    }
+        final data = snapshot.data!.docs.map((doc) {
+          final consumption = doc.data() as Map<String, dynamic>;
+          print('Document data: $consumption');
 
-    return ListView.builder(
-      itemCount: dailyActivities.length,
-      itemBuilder: (context, index) {
-        final activity = dailyActivities[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Row(
-            children: [
-              // Icône circulaire pour l'activité
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.grey[200],
-                child: const Icon(Icons.local_fire_department, color: Colors.grey),
-              ),
-              SizedBox(width: 10),
+          // Logique conditionnelle pour ajuster la description
+          String unit;
+          String description;
+          if (consumption['type'] == 'Tabac') {
+            unit = consumption['quantity'] > 1 ? 'cigarettes' : 'cigarette';
+            description =
+                '${consumption['quantity']} $unit consommée${consumption['quantity'] > 1 ? 's' : ''}';
+          } else if (consumption['type'] == 'Alcool') {
+            unit = consumption['quantity'] > 1 ? 'verres' : 'verre';
+            description =
+                '${consumption['quantity']} $unit d\'alcool consommé${consumption['quantity'] > 1 ? 's' : ''}';
+          } else {
+            unit = consumption['type'];
+            description =
+                '${consumption['quantity']} $unit consommé${consumption['quantity'] > 1 ? 's' : ''}';
+          }
 
-              // Détails de l'activité
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      activity['description']!,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          return {
+            'time': DateFormat('HH:mm')
+                .format(DateTime.parse(consumption['date']).toLocal()),
+            'description': description,
+            'type': consumption[
+                'type'], // Ajoutez le type pour l'utiliser dans l'affichage
+          };
+        }).toList();
+
+        return ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final activity = data[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey[200],
+                    child: _getIconForConsumption(activity['type']),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          activity['description']!,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    activity['time']!,
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                ],
               ),
-
-              // Heure de l'activité
-              Text(
-                activity['time']!,
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
+  }
+
+  /// Retourne l'icône appropriée pour le type de consommation
+  Widget _getIconForConsumption(String type) {
+    switch (type) {
+      case 'Tabac':
+        return const Icon(Icons.smoking_rooms,
+            color: Color.fromRGBO(4, 75, 217, 1));
+      case 'Alcool':
+        return const Icon(Icons.local_bar,
+            color: Color.fromRGBO(4, 75, 217, 1));
+      default:
+        return const Icon(Icons.local_fire_department, color: Colors.grey);
+    }
   }
 }

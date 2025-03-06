@@ -1,35 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:hygie_mobile/presentation/recompense/hycoins_entete.dart';
-import 'package:hygie_mobile/presentation/recompense/reward_card';
+import 'package:hygie_mobile/presentation/recompense/reward_card.dart'; // Importer RewardCard
+import 'package:hygie_mobile/presentation/dashboard/top_bar.dart'; // Importer TopBar
 
-class RecompensePage extends StatelessWidget {
+class RecompensePage extends StatefulWidget {
   const RecompensePage({Key? key}) : super(key: key);
+
+  @override
+  _RecompensePageState createState() => _RecompensePageState();
+}
+
+class _RecompensePageState extends State<RecompensePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(
-        title: '',
-        onNotificationPressed: () {
-          // Action à réaliser lorsque le bouton de notification est pressé
-          print('Notification pressée');
-        },
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HycoinsHeader(),
-            const SizedBox(height: 20),
-            _buildSectionTitle('Codes promo'),
-            const SizedBox(height: 10),
-            _buildPromoCodes(),
-            const SizedBox(height: 20),
-            _buildSectionTitle('Virements'),
-            const SizedBox(height: 10),
-            _buildVirements(),
-            const SizedBox(height: 20),
+            // TopBar standardisée
+            TopBar(
+              showCagnotte: false,
+            ),
+
+            // Contenu spécifique à la page récompense
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    const HycoinsHeader(),
+                    const SizedBox(height: 20),
+                    _buildSectionTitle('Offres tendances'),
+                    const SizedBox(height: 10),
+                    _buildOffresTendances(),
+                    const SizedBox(height: 20),
+                    _buildSectionTitle('Codes promo'),
+                    const SizedBox(height: 10),
+                    _buildPromoCodes(),
+                    const SizedBox(height: 20),
+                    _buildSectionTitle('Cadeaux'),
+                    const SizedBox(height: 10),
+                    _buildCadeaux(),
+                    const SizedBox(
+                        height: 20), // Espace en bas pour le défilement
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -45,6 +80,32 @@ class RecompensePage extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
+      ),
+    );
+  }
+
+  Widget _buildOffresTendances() {
+    return SizedBox(
+      height: 200, // Hauteur ajustée
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: const [
+          RewardCard(
+            title: 'Amazon Prime Video',
+            subtitle: '1 mois d\'abonnement',
+            hyCoins: 500,
+          ),
+          RewardCard(
+            title: 'Decathlon',
+            subtitle: '-25% sur une sélection d\'articles',
+            hyCoins: 300,
+          ),
+          RewardCard(
+            title: 'HelloFresh',
+            subtitle: 'Code promo : 95 €',
+            hyCoins: 375,
+          ),
+        ],
       ),
     );
   }
@@ -65,26 +126,26 @@ class RecompensePage extends StatelessWidget {
             subtitle: 'Code promo : -15%',
             hyCoins: 425,
           ),
+          RewardCard(
+            title: 'Amazon Prime Video',
+            subtitle: '1 mois d\'abonnement',
+            hyCoins: 500,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildVirements() {
+  Widget _buildCadeaux() {
     return SizedBox(
       height: 200, // Hauteur ajustée
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: const [
           RewardCard(
-            title: '€10',
-            subtitle: 'Virement bancaire',
-            hyCoins: 1800,
-          ),
-          RewardCard(
-            title: '€30',
-            subtitle: 'Virement bancaire',
-            hyCoins: 3200,
+            title: 'Gourde Hygie',
+            subtitle: 'Gourde 500 ml',
+            hyCoins: 900,
           ),
         ],
       ),
