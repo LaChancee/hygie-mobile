@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hygie_mobile/presentation/recompense/modale_confirmation_recompense.dart'; // Importer ModaleConfirmationRecompense
+import 'package:hygie_mobile/presentation/recompense/topbar.dart'; // Importer TopBar
 
 class RecompenseDetailPage extends StatelessWidget {
   final String title;
@@ -23,6 +24,7 @@ class RecompenseDetailPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
+          TopBar(), // Ajouter TopBar ici
           Container(
             width: double.infinity,
             height: 200,

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ModaleConfirmationAchat extends StatefulWidget {
   final String titre;
   final int points;
   final bool isCompleted;
+  final String objectifId; // Ajoutez l'ID de l'objectif
 
   const ModaleConfirmationAchat({
     required this.titre,
     required this.points,
     required this.isCompleted,
+    required this.objectifId, // Ajoutez l'ID de l'objectif
   });
 
   @override
@@ -17,6 +21,54 @@ class ModaleConfirmationAchat extends StatefulWidget {
 
 class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
   bool _isValidated = false;
+  int _currentPoints = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentPoints();
+  }
+
+  Future<void> _fetchCurrentPoints() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final profilRef = FirebaseFirestore.instance.collection('profil').doc(userId);
+      final snapshot = await profilRef.get();
+      if (snapshot.exists) {
+        setState(() {
+          _currentPoints = snapshot.data()?['points'] ?? 0;
+        });
+      }
+    }
+  }
+
+  Future<void> _incrementPoints() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final profilRef = FirebaseFirestore.instance.collection('profil').doc(userId);
+      final objectifRef = FirebaseFirestore.instance.collection('objectif').doc(widget.objectifId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final profilSnapshot = await transaction.get(profilRef);
+        final objectifSnapshot = await transaction.get(objectifRef);
+
+        if (!profilSnapshot.exists) {
+          throw Exception("Profil does not exist!");
+        }
+        if (!objectifSnapshot.exists) {
+          throw Exception("Objectif does not exist!");
+        }
+
+        final currentPoints = profilSnapshot.data()?['points'] ?? 0;
+
+        transaction.update(profilRef, {'points': currentPoints + widget.points});
+        setState(() {
+          _currentPoints = currentPoints + widget.points;
+          _isValidated = true; // Mettre à jour l'état pour indiquer que la validation est effectuée
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +139,7 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                         ),
                         if (widget.isCompleted && !_isValidated)
                           Text(
-                            '${widget.points}',
+                            '${_currentPoints + widget.points}',
                             style: TextStyle(
                               color: Color(0xFF222222),
                               fontSize: 16,
@@ -137,11 +189,15 @@ class _ModaleConfirmationAchatState extends State<ModaleConfirmationAchat> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isValidated = true;
-                          });
-                          // Ajoutez ici la logique pour valider les points
+                        onTap: () async {
+                          try {
+                            await _incrementPoints();
+                          } catch (e) {
+                            // Gérer l'erreur si les points ont déjà été validés
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                          }
                         },
                         child: Container(
                           height: 53,

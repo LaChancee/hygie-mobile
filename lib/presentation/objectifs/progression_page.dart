@@ -8,8 +8,11 @@ class ProgressionPage extends StatefulWidget {
   final String title;
   final String objectifId;
 
-  const ProgressionPage(
-      {required this.type, required this.title, required this.objectifId});
+  const ProgressionPage({
+    required this.type,
+    required this.title,
+    required this.objectifId,
+  });
 
   @override
   _ProgressionPageState createState() => _ProgressionPageState();
@@ -204,6 +207,7 @@ class _ProgressionPageState extends State<ProgressionPage> {
                                           progression:
                                               sousObjectif['progression']
                                                   .toDouble(),
+                                          objectifId: widget.objectifId, // Passez l'ID de l'objectif ici
                                         ),
                                       ),
                                       SizedBox(
@@ -229,12 +233,14 @@ class ListObjectif extends StatefulWidget {
   final String description;
   final int points;
   final double progression;
+  final String objectifId; // Ajoutez l'ID de l'objectif
 
   const ListObjectif({
     required this.titre,
     required this.description,
     required this.points,
     required this.progression,
+    required this.objectifId, // Ajoutez l'ID de l'objectif
   });
 
   @override
@@ -242,6 +248,7 @@ class ListObjectif extends StatefulWidget {
 }
 
 class _ListObjectifState extends State<ListObjectif> {
+
   void _showModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -255,7 +262,8 @@ class _ListObjectifState extends State<ListObjectif> {
         return ModaleConfirmationAchat(
           titre: widget.titre,
           points: widget.points,
-          isCompleted: widget.progression == 1.0,
+          isCompleted: widget.progression == 1.0, 
+          objectifId: widget.objectifId, // Passez l'ID de l'objectif ici
         );
       },
     );
