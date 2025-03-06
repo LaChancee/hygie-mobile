@@ -5,6 +5,7 @@ import 'package:hygie_mobile/presentation/dashboard/header_dashboard.dart'; // A
 import 'package:hygie_mobile/presentation/dashboard/test_button.dart'; // Assurez-vous que le chemin est correct
 import 'package:hygie_mobile/presentation/dashboard/widget_dashboard.dart'; // Assurez-vous que le chemin est correct
 import 'package:hygie_mobile/presentation/dashboard/discover_button.dart'; // Assurez-vous que le chemin est correct
+import 'package:hygie_mobile/presentation/dashboard/content_dashboard.dart'; // Importez le contenu du dashboard
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -29,43 +30,10 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
 
-          // Contenu principal avec coins arrondis en haut
+          // Tout le contenu du dashboard dans un seul SliverToBoxAdapter
           SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.only(left: 0, right: 0, top: 0),
-              // Supprime le margin pour toucher les bords
-              decoration: BoxDecoration(
-                color: Colors.white,
-                // Couleur de fond de la bottom sheet
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                // Coins arrondis en haut
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4), // Couleur de l'ombre
-                    spreadRadius: 10, // Propage l'ombre
-                    blurRadius: 30, // Flou de l'ombre
-                    offset: Offset(0, 3), // Déplacement de l'ombre
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                // Padding à l'intérieur de la "bottom sheet"
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Bouton de Test
-                    TestButton(),
-                    SizedBox(height: 20),
-                    // Section des Widgets
-                    WidgetsSection(),
-                    SizedBox(height: 20),
-                    // Section des Offres Personnalisées
-                    DiscoverButton(),
-                  ],
-                ),
-              ),
-            ),
+            child:
+                ContentsDashboard(), // Utilise directement le composant ContentsDashboard
           ),
         ],
       ),

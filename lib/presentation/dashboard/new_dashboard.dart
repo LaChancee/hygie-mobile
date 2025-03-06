@@ -23,30 +23,64 @@ class NewDashboard extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          bottom: false, // Ne pas ajouter de marge en bas
-          child: Column(
-            children: [
-              // TopBar (Barre supérieure)
-              TopBar(),
-
-              // Contenu principal
-              Expanded(
-                child: Column(
-                  children: [
-                    // CardsContext (Carte avec les jours sans fumer)
-                    CardsContext(),
-
-                    // ContentsDashboard (Widgets du Dashboard)
-                    Expanded(
-                      child: ContentsDashboard(),
-                    ),
-                  ],
+          bottom: false,
+          child: CustomScrollView(
+            slivers: [
+              // TopBar (Barre supérieure) - Fixe en haut
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _TopBarDelegate(
+                  minHeight: 60,
+                  maxHeight: 60,
+                  child: TopBar(),
                 ),
+              ),
+
+              // CardsContext - Défilera avec le scroll
+              SliverToBoxAdapter(
+                child: CardsContext(),
+              ),
+
+              // ContentsDashboard (Widgets du Dashboard) - Restera en bas
+              SliverToBoxAdapter(
+                child: ContentsDashboard(),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+// Delegate pour le SliverPersistentHeader
+class _TopBarDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  _TopBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_TopBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
