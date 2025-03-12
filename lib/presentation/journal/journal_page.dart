@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/programme/programme.dart';
 import 'package:intl/intl.dart';
 import 'package:hygie_mobile/commons/header.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hygie_mobile/presentation/journal/add_button.dart';
 import 'package:hygie_mobile/presentation/journal/modale_add_activity.dart';
+import 'package:hygie_mobile/presentation/programme/new_programme.dart';
 
 class JournalPage extends StatefulWidget {
   final bool openAddActivityModal;
@@ -20,14 +21,31 @@ class _JournalPageState extends State<JournalPage>
     with SingleTickerProviderStateMixin {
   DateTime selectedDate = DateTime.now();
   late TabController _tabController;
+  bool isActivitiesTab = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabSelection);
     if (widget.openAddActivityModal) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showAddActivityModal();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabSelection);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) {
+      setState(() {
+        isActivitiesTab = _tabController.index == 0;
       });
     }
   }
@@ -45,6 +63,18 @@ class _JournalPageState extends State<JournalPage>
         return ModaleAddActivity();
       },
     );
+  }
+
+  void _handleAddButtonPress() {
+    if (isActivitiesTab) {
+      _showAddActivityModal();
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const NewProgrammePage(),
+        ),
+      );
+    }
   }
 
   /// Retourne le flux des consommations pour la date sélectionnée
@@ -153,16 +183,40 @@ class _JournalPageState extends State<JournalPage>
                     child: _buildActivityList(),
                   ),
                   // Vue "Programme"
-                  const Center(child: Text('Programme - En construction')),
+                  ProgramSection(),
                 ],
               ),
             ),
             const SizedBox(height: 20),
 
-            // Bouton "Ajouter une activité"
+            // Bouton "Ajouter une activité/programme"
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: AddButton(),
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: _handleAddButtonPress,
+                  icon: Icon(Icons.add, color: Colors.white),
+                  label: Text(
+                    isActivitiesTab
+                        ? 'Ajouter une activité'
+                        : 'Ajouter un programme',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF044BD9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
           ],
