@@ -1,4 +1,4 @@
-package com.example.hygie_mobile
+package com.hygie_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

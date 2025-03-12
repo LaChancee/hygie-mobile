@@ -49,6 +49,15 @@ dependencies:
   widgetbook_annotation: ^3.2.0
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon.png"
+  adaptive_icon_foreground: "assets/icons/icon.png"
+  adaptive_icon_background: "#0E88E5" # Le bleu de votre image
+  min_sdk_android: 21
   flutter_test:
     sdk: flutter
 
