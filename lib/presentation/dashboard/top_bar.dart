@@ -3,6 +3,8 @@ import 'package:hygie_mobile/presentation/profil/profil_screen.dart';
 import '../../data/services/hycoins_service.dart';
 import '../../data/services/profile_service.dart';
 import '../../widgets/hycoins_mini.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TopBar extends StatelessWidget {
   final bool showCagnotte;
@@ -18,6 +20,10 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Récupérer l'email de l'utilisateur connecté
+    final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    final bool isSpecialUser = userEmail == 'toto@toto.fr';
+
     return Container(
       width: double.infinity,
       height: 60, // Hauteur fixe pour toutes les TopBar
@@ -92,10 +98,15 @@ class TopBar extends StatelessWidget {
                 ],
               ),
               clipBehavior: Clip.antiAlias,
-              child: Image.asset(
-                'assets/images/logo_user.png',
-                fit: BoxFit.cover,
-              ),
+              child: isSpecialUser
+                  ? Image.asset(
+                      'assets/images/pdpMDP.jpg',
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/logo_user.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
         ],
@@ -110,41 +121,44 @@ class BalanceContainer extends StatefulWidget {
 }
 
 class _BalanceContainerState extends State<BalanceContainer> {
-  int _hycoinsBalance = 0;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBalances();
-  }
-
-  Future<void> _loadBalances() async {
-    try {
-      final hyCoinsService = HyCoinsService();
-      final balances = await hyCoinsService.getBalanceAndPoints();
-      setState(() {
-        _hycoinsBalance = balances['hycoins'] ?? 0;
-        _isLoading = false;
-      });
-    } catch (e) {
-      print("Erreur lors du chargement des soldes: $e");
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // HyCoins
-        HyCoinsMini(
-          balance: _hycoinsBalance,
-          isLoading: _isLoading,
-        ),
-      ],
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('profil')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return HyCoinsMini(
+            balance: 0,
+            isLoading: true,
+          );
+        }
+
+        if (snapshot.hasError) {
+          print("Erreur lors de la récupération des points: ${snapshot.error}");
+          return HyCoinsMini(
+            balance: 0,
+            isLoading: false,
+          );
+        }
+
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return HyCoinsMini(
+            balance: 0,
+            isLoading: false,
+          );
+        }
+
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final points = data['points'] ?? 0;
+
+        return HyCoinsMini(
+          balance: points,
+          isLoading: false,
+        );
+      },
     );
   }
 }

@@ -61,6 +61,12 @@ class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompe
             .update({
           'points': _remainingPoints,
         });
+        
+        // Notifier l'en-tête du changement des points
+        // Cette partie dépend de votre structure d'application
+        // Si vous utilisez un stream pour les points dans l'en-tête, la mise à jour se fera automatiquement
+        // Sinon, vous devrez utiliser une notification ou un callback
+        
       } catch (e) {
         print('Erreur lors de la mise à jour des points: $e');
       }

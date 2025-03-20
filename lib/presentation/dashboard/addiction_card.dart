@@ -1,135 +1,165 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/services/abstinence_calculator.dart';
 
-class Cards extends StatelessWidget {
+class Cards extends StatefulWidget {
+  @override
+  _CardsState createState() => _CardsState();
+}
+
+class _CardsState extends State<Cards> {
+  int _daysWithoutTobacco = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDaysWithoutTobacco();
+  }
+
+  Future<void> _loadDaysWithoutTobacco() async {
+    try {
+      final days = await AbstinenceCalculator.getDaysWithoutTobacco();
+      setState(() {
+        _daysWithoutTobacco = days;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Erreur lors du chargement des jours sans tabac: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    return Column(
-      children: [
-        Container(
-          width: screenWidth * 0.9, // 90% de la largeur de l'écran
-          constraints: BoxConstraints(maxWidth: 400), // Max sur grands écrans
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04,
-            vertical: screenHeight * 0.015,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF4DD0E1), // Bleu cyan vif
-                Color(0xFF81C784), // Vert vif
-                Color(0xFFBA68C8), // Violet vif
-              ],
-              stops: [0.0, 0.5, 1.0],
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 20,
-                spreadRadius: 2,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(0.00, -1.00),
+          end: Alignment(0, 1),
+          colors: [Color(0xFF1991FF), Color(0xFF044BD9)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x26000000),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+            spreadRadius: 0,
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: screenWidth * 0.15,
-                      height: screenWidth * 0.15,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Opacity(
-                      opacity: 0.7,
-                      child: Container(
-                        width: screenWidth * 0.2,
-                        height: screenWidth * 0.2,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.5),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Testez votre niveau de dépendance',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.05,
-                        fontWeight: FontWeight.w700,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 2,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Fixez-vous des objectifs et obtenez des données plus détaillées.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.035,
-                        height: 1.4,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 2,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              const Text(
+                'Jours sans tabac',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(999),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x1E072250),
-                      blurRadius: 12,
-                    )
-                  ],
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: ShapeDecoration(
+                  color: Color(0x19FFFFFF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(99),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      '375',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.03,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Icon(
+                      Icons.smoke_free,
+                      color: Colors.white,
+                      size: 16,
                     ),
                     SizedBox(width: 4),
-                    Icon(Icons.star,
-                        size: screenWidth * 0.04, color: Colors.white),
+                    Text(
+                      'Tabac',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Row(
+                  children: [
+                    Text(
+                      _daysWithoutTobacco.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _daysWithoutTobacco <= 1 ? 'jour' : 'jours',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+          const SizedBox(height: 8),
+          Text(
+            _getMotivationalMessage(_daysWithoutTobacco),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontFamily: 'DM Sans',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  String _getMotivationalMessage(int days) {
+    if (days == 0) {
+      return "C'est le moment de commencer votre parcours sans tabac !";
+    } else if (days <= 3) {
+      return "Les premières 72 heures sont cruciales. Continuez, vous êtes sur la bonne voie !";
+    } else if (days <= 7) {
+      return "Après une semaine, votre goût et odorat s'améliorent !";
+    } else if (days <= 14) {
+      return "Votre circulation sanguine s'améliore chaque jour sans tabac.";
+    } else if (days <= 30) {
+      return "Presque un mois ! Votre peau récupère et votre respiration s'améliore.";
+    } else if (days <= 90) {
+      return "Vos poumons commencent à se nettoyer. Continuez ainsi !";
+    } else if (days <= 180) {
+      return "Vous êtes sur la voie de la liberté ! Votre risque de maladies cardiaques diminue.";
+    } else {
+      return "Félicitations ! Vous avez considérablement réduit vos risques de cancer du poumon.";
+    }
   }
 }
