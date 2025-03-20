@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hygie_mobile/presentation/recompense/recapitulatif_achat.dart'; // Importer la page de destination
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hygie_mobile/presentation/home_page.dart';
 
 class ModaleConfirmationRecompense extends StatefulWidget {
   final String titre;
@@ -18,8 +22,53 @@ class ModaleConfirmationRecompense extends StatefulWidget {
 
 class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompense> {
   bool _isConfirmed = false;
+  int _remainingPoints = 0;
 
-  void _confirm() {
+  @override
+  void initState() {
+    super.initState();
+    _loadUserPoints();
+  }
+
+  Future<void> _loadUserPoints() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('profil')
+            .doc(user.uid)
+            .get();
+        
+        if (userDoc.exists) {
+          final currentPoints = userDoc.data()?['points'] as int? ?? 0;
+          setState(() {
+            _remainingPoints = currentPoints - widget.points;
+          });
+        }
+      } catch (e) {
+        print('Erreur lors de la récupération des points: $e');
+      }
+    }
+  }
+
+  Future<void> _updateUserPoints() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('profil')
+            .doc(user.uid)
+            .update({
+          'points': _remainingPoints,
+        });
+      } catch (e) {
+        print('Erreur lors de la mise à jour des points: $e');
+      }
+    }
+  }
+
+  void _confirm() async {
+    await _updateUserPoints();
     setState(() {
       _isConfirmed = true;
     });
@@ -92,7 +141,11 @@ class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompe
                           const SizedBox(height: 32),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pop(context); // Fermer la modale
+                              // Fermer la modale et retourner à la page d'accueil
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (context) => HomePage()),
+                                (route) => false,
+                              );
                             },
                             child: Container(
                               height: 53,
@@ -148,7 +201,7 @@ class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompe
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            'Confirmer l’obtention de cette récompense ?',
+                            'Confirmer l\'obtention de cette récompense ?',
                             style: TextStyle(
                               color: Color(0xFF222222),
                               fontSize: 14,
@@ -170,7 +223,7 @@ class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompe
                                 ),
                               ),
                               Text(
-                                '${widget.points}',
+                                '$_remainingPoints',
                                 style: const TextStyle(
                                   color: Color(0xFF222222),
                                   fontSize: 16,

@@ -5,7 +5,12 @@ import 'package:hygie_mobile/presentation/recompense/reward_card.dart'; // Impor
 import 'package:hygie_mobile/presentation/dashboard/top_bar.dart'; // Importer TopBar
 
 class RecompensePage extends StatefulWidget {
-  const RecompensePage({Key? key}) : super(key: key);
+  final int remainingPoints;
+  
+  const RecompensePage({
+    Key? key,
+    required this.remainingPoints,
+  }) : super(key: key);
 
   @override
   _RecompensePageState createState() => _RecompensePageState();
@@ -59,8 +64,7 @@ class _RecompensePageState extends State<RecompensePage>
                     _buildSectionTitle('Cadeaux'),
                     const SizedBox(height: 10),
                     _buildCadeaux(),
-                    const SizedBox(
-                        height: 20), // Espace en bas pour le défilement
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
