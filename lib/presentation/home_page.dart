@@ -4,6 +4,8 @@ import 'package:hygie_mobile/presentation/dashboard/new_dashboard.dart';
 import 'package:hygie_mobile/presentation/journal/journal_page.dart';
 import 'package:hygie_mobile/presentation/objectifs/objectif_page.dart';
 import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +14,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  int _userPoints = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserPoints();
+  }
+
+  Future<void> _loadUserPoints() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      if (mounted) {
+        setState(() {
+          _userPoints = userDoc.data()?['points'] as int? ?? 0;
+        });
+      }
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             NewDashboard(),
             JournalPage(),
-            RecompensePage(),
+            RecompensePage(remainingPoints: _userPoints),
             ObjectifsPage(),
           ],
         ),
