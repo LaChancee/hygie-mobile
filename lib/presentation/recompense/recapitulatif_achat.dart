@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hygie_mobile/presentation/home_page.dart';
 
 class ListHistorique extends StatelessWidget {
   @override
@@ -249,81 +250,19 @@ class RecapitulatifAchat extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Amazon Prime Video',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF222222),
-                      fontSize: 20,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '1 mois d\'abonnement',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF222222),
-                      fontSize: 14,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Plongez dans un univers de divertissement illimité avec Amazon Prime Video ! Profitez d\'un accès exclusif à des milliers de films, séries télévisées captivantes, documentaires fascinants et contenus originaux primés.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF222222),
-                      fontSize: 14,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             ListHistorique(),
             const Spacer(),
             GestureDetector(
-              onTap: () async {
-                final user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
-                  final userDoc = await FirebaseFirestore.instance
-                      .collection('profil')
-                      .doc(user.uid)
-                      .get();
-                  
-                  if (userDoc.exists) {
-                    final currentPoints = userDoc.data()?['points'] ?? 0;
-                    final remainingPoints = currentPoints - 375; // 375 est le coût de l'achat
-                    
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-                      ),
-                      builder: (context) {
-                        return RecompensePage(remainingPoints: remainingPoints);
-                      },
-                    );
-                  }
-                }
+              onTap: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (route) => false,
+                );
               },
               child: Container(
                 width: double.infinity,
+                height: 53,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 decoration: ShapeDecoration(
                   color: const Color(0xFF044BD9),
@@ -331,26 +270,20 @@ class RecapitulatifAchat extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'Valider',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w600,
-                      ),
+                child: const Center(
+                  child: Text(
+                    'Valider',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 30),
           ],
         ),
       ),
