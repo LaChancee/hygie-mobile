@@ -3,6 +3,8 @@ import 'package:hygie_mobile/presentation/journal/journal_page.dart';
 import 'package:hygie_mobile/presentation/objectifs/objectif_page.dart';
 import 'package:hygie_mobile/presentation/recompense/recompense_page.dart';
 import 'package:hygie_mobile/presentation/dashboard/new_dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ResponsiveTabBar extends StatelessWidget {
   final List<Map<String, dynamic>> tabs = [
@@ -16,7 +18,7 @@ class ResponsiveTabBar extends StatelessWidget {
       bool isActive, int index) {
     return Expanded(
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           // Navigation vers les différentes pages en fonction de l'index
           switch (index) {
             case 0: // Dashboard
@@ -32,10 +34,27 @@ class ResponsiveTabBar extends StatelessWidget {
               );
               break;
             case 2: // Récompenses
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RecompensePage()),
-              );
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                try {
+                  final userDoc = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.uid)
+                      .get();
+                  final currentPoints = userDoc.data()?['points'] as int? ?? 0;
+                  
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecompensePage(remainingPoints: currentPoints),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  print('Erreur lors de la récupération des points: $e');
+                }
+              }
               break;
             case 3: // Objectifs
               Navigator.push(
