@@ -147,10 +147,11 @@ class _ModaleConfirmationRecompenseState extends State<ModaleConfirmationRecompe
                           const SizedBox(height: 32),
                           GestureDetector(
                             onTap: () {
-                              // Fermer la modale et retourner à la page d'accueil
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(builder: (context) => HomePage()),
-                                (route) => false,
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RecapitulatifAchat(),
+                                ),
                               );
                             },
                             child: Container(
